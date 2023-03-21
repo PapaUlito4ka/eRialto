@@ -11,13 +11,22 @@ export class User {
 
     @Column({
         length: 64,
-        nullable: false
+        nullable: false,
+        unique: true
     })
     email: string;
 
     @Column({
         length: 256,
+        nullable: false,
+    })
+    passwordHash: string;
+
+    @Column({
+        length: 256,
         nullable: false
     })
-    password: string;
+    salt: string;
 }
+
+export default User;
