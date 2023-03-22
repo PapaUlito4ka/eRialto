@@ -1,8 +1,10 @@
 <script setup>
+import NavBar from './components/navbar.vue';
 </script>
 
 <template>
-  <h1>Goodbye world</h1>
+  <NavBar />
+  <router-view />
 </template>
 
 
