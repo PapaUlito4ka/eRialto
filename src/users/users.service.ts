@@ -40,11 +40,18 @@ export class UsersService {
     throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+
+    user.email = updateUserDto.email;
+
+    this.usersRepository.save(user);
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.findOne(id);
+
+    return await this.usersRepository.remove(user);
   }
 }

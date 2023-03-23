@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { UserProfile } from './user-profile.entity';
+import { Product } from 'src/products/entities/product.entity';
+import { IsEmail } from 'class-validator';
 
 @Entity({
     name: 'users'
@@ -14,6 +17,7 @@ export class User {
         nullable: false,
         unique: true
     })
+    @IsEmail()
     email: string;
 
     @Column({
@@ -27,6 +31,15 @@ export class User {
         nullable: false
     })
     salt: string;
+
+    @OneToOne(() => UserProfile, (profile) => profile.user, {
+        nullable: false,
+        onDelete: "CASCADE"
+    })
+    profile: UserProfile;
+
+    @OneToMany(() => Product, (product) => product.user)
+    products: Product[]
 }
 
 export default User;
