@@ -11,6 +11,8 @@ import { UsersService } from 'src/users/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import User from 'src/users/entities/user.entity';
 import { RefreshJwtStrategy } from './refresh-jwt.strategy';
+import UserProfile from 'src/users/entities/user-profile.entity';
+import Product from 'src/products/entities/product.entity';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { RefreshJwtStrategy } from './refresh-jwt.strategy';
         secret: configService.get('JWT_SECRET'),
       }),
     }),
-    TypeOrmModule.forFeature([User])
+    TypeOrmModule.forFeature([User, UserProfile, Product])
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, RefreshJwtStrategy, LocalStrategy, UsersService],

@@ -1,9 +1,9 @@
 import { Min } from "class-validator";
-import User from "src/users/entities/user-profile.entity";
+import type { User } from "src/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
-    name: 'users'
+    name: 'products'
 })
 export class Product {
     @PrimaryGeneratedColumn('identity', {
@@ -11,8 +11,7 @@ export class Product {
     })
     id: number;
 
-    @ManyToOne(() => User, (user) => user.products)
-    @JoinColumn()
+    @ManyToOne('User', 'products')
     user: User;
 
     @Column({
@@ -32,3 +31,5 @@ export class Product {
     @Min(1)
     price: Number;
 }
+
+export default Product;

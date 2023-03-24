@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import User from './user.entity';
+import type User from './user.entity';
 
 @Entity({
     name: 'users_profiles'
@@ -10,7 +10,7 @@ export class UserProfile {
     })
     id: number;
 
-    @OneToOne(() => User, (user) => user.profile, {
+    @OneToOne('User', 'profile', {
         nullable: false
     })
     @JoinColumn()
@@ -27,12 +27,6 @@ export class UserProfile {
         nullable: false,
     })
     lastname: string;
-
-    @Column({
-        length: 256,
-        nullable: false
-    })
-    salt: string;
 }
 
-export default User;
+export default UserProfile;
