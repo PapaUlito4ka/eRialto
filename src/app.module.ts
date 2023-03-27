@@ -8,6 +8,8 @@ import { config } from 'dotenv';
 import { ProductsModule } from './products/products.module';
 import { CommentsModule } from './comments/comments.module';
 import { AuthModule } from './auth/auth.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ChatModule } from './chat/chat.module';
 
 config();
 
@@ -28,6 +30,8 @@ config();
     ProductsModule,
     CommentsModule,
     AuthModule,
+    CategoriesModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
