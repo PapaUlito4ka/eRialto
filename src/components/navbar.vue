@@ -1,3 +1,10 @@
+<script>
+
+
+
+</script>
+
+
 <template>
     <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -9,8 +16,10 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav" id="nav">
                     <router-link to="/profile" class="nav-link">Profile</router-link>
+                    <router-link to="/products" class="nav-link">Products</router-link>
                     <router-link to="/sign-in" class="nav-link">Sign&nbsp;in</router-link>
                     <router-link to="/sign-up" class="nav-link">Sign&nbsp;up</router-link>
+                    <router-link to="/logout" class="nav-link">Logout</router-link>
                 </div>
             </div>
         </div>
