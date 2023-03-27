@@ -9,11 +9,11 @@ export default {
         }
     },
     methods: {
-        ...mapMutations(["setUser", "setToken"]),
+        ...mapMutations(["setUser", "setAccessToken"]),
         login(e) {
             e.preventDefault()
-            this.setUser('martyaxin@inbox.ru')
-            this.setToken('espinWAKPOFE12321lA{EPFAOg}')
+            this.setUser(this.email)
+            this.setAccessToken('espinWAKPOFE12321lA{EPFAOg}')
             this.$router.push('/')
         }
     }

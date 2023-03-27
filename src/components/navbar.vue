@@ -1,7 +1,11 @@
 <script>
+import { mapGetters } from "vuex";
 
-
-
+export default {
+    computed: {
+        ...mapGetters(["isLoggedIn"])
+    }
+}
 </script>
 
 
@@ -14,12 +18,14 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav" id="nav">
+                <div v-if="isLoggedIn" class="navbar-nav" id="nav">
                     <router-link to="/profile" class="nav-link">Profile</router-link>
                     <router-link to="/products" class="nav-link">Products</router-link>
+                    <router-link to="/logout" class="nav-link">Logout</router-link>
+                </div>
+                <div v-else class="navbar-nav" id="nav">
                     <router-link to="/sign-in" class="nav-link">Sign&nbsp;in</router-link>
                     <router-link to="/sign-up" class="nav-link">Sign&nbsp;up</router-link>
-                    <router-link to="/logout" class="nav-link">Logout</router-link>
                 </div>
             </div>
         </div>
