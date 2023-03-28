@@ -12,8 +12,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         let message = (exception as any).message.message;
         let code = 'HttpException';
 
-        Logger.error(message, (exception as any).stack, `${request.method} ${request.url}`);
-
         let status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         switch (exception.constructor) {
@@ -47,6 +45,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
             default:
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
                 message = (exception as Error).message;
+                Logger.error(message, (exception as any).stack, `${request.method} ${request.url}`);
         }
 
         response.status(status).json(GlobalResponseError(status, message, code, request));

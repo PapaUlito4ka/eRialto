@@ -1,4 +1,5 @@
 import { Min } from "class-validator";
+import type { Category } from "src/categories/entities/category.entity";
 import type { User } from "src/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -13,6 +14,9 @@ export class Product {
 
     @ManyToOne('User', 'products')
     user: User;
+
+    @ManyToOne('Category', 'products')
+    category: Category;
 
     @Column({
         length: 128,

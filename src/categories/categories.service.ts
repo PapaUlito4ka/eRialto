@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { Repository } from 'typeorm';
+import Category from './entities/category.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PaginateQuery, paginate } from 'nestjs-paginate';
+import { categoriesPaginateConfig } from './paginate.config';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(
+    @InjectRepository(Category)
+    private categoriesRepository: Repository<Category>
+  ) { }
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    const newCategory = this.categoriesRepository.create(createCategoryDto);
+
+    await this.categoriesRepository.save(newCategory);
+    return newCategory;
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll(query: PaginateQuery) {
+    return paginate(query, this.categoriesRepository, categoriesPaginateConfig);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: number) {
+    const category = await this.categoriesRepository.findOneBy({ id: id });
+    if (category) return category;
+    throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    await this.findOne(id);
+    this.categoriesRepository.update({ id: id }, updateCategoryDto);
+    return await this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    const category = await this.findOne(id);
+    return this.categoriesRepository.remove(category);
   }
 }
