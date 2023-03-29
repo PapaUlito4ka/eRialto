@@ -14,6 +14,11 @@ export class UsersController {
     return this.usersService.getUserProfile(req.user);
   }
 
+  @Get('my-products')
+  myProducts(@Request() req) {
+    return this.usersService.myProducts(req.user);
+  }
+
   @Patch()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(req.user, updateUserDto);

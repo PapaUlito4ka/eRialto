@@ -64,4 +64,8 @@ export class UsersService {
     const user = await this.findOne(id);
     return this.usersRepository.remove(user);
   }
+
+  async myProducts(user: User) {
+    // TODO: get user products (filter)
+  }
 }
