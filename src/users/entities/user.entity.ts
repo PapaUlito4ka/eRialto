@@ -38,7 +38,9 @@ export class User {
     })
     profile: UserProfile;
 
-    @OneToMany('Product', 'user')
+    @OneToMany('Product', 'user', {
+        onDelete: "CASCADE"
+    })
     products: Product[];
 }
 

@@ -17,7 +17,9 @@ export class Category {
     })
     name: String;
 
-    @OneToMany('Product', 'category')
+    @OneToMany('Product', 'category', {
+        onDelete: "CASCADE"
+    })
     products: Product[];
 }
 

@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import type User from './user.entity';
+import type Image from 'src/images/entities/image.entity';
 
 @Entity({
     name: 'users_profiles'
@@ -11,7 +12,8 @@ export class UserProfile {
     id: number;
 
     @OneToOne('User', 'profile', {
-        nullable: false
+        nullable: false,
+        onDelete: "CASCADE"
     })
     @JoinColumn()
     user: User;
@@ -27,6 +29,11 @@ export class UserProfile {
         nullable: false,
     })
     lastname: string;
+
+    @OneToOne('Image', 'userProfile', {
+        onDelete: "CASCADE"
+    })
+    image: Image;
 }
 
 export default UserProfile;
