@@ -4,7 +4,7 @@ import Profile from '../views/Profile.vue';
 import SignIn from '../views/SignIn.vue';
 import SignUp from '../views/SignUp.vue';
 import Logout from '../views/Logout.vue';
-import Products from '../views/Products.vue';
+import Search from '../views/Search.vue';
 import store from '../store';
 
 const routes = [
@@ -14,7 +14,7 @@ const routes = [
     { path: '/', name: 'Home', component: Home, meta: { requiresAuth: true } },
     { path: '/profile', name: 'Profile', component: Profile, meta: { requiresAuth: true } },
     { path: '/logout', name: 'Logout', component: Logout, meta: { requiresAuth: true } },
-    { path: '/products', name: 'Products', component: Products, meta: { requiresAuth: true } },
+    { path: '/search', name: 'Search', component: Search, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({

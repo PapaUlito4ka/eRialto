@@ -4,13 +4,24 @@ import { mapGetters } from "vuex";
 export default {
     computed: {
         ...mapGetters(["isLoggedIn"])
+    },
+    data() {
+        return {
+            query: ''
+        }
+    },
+    methods: {
+        // searchProducts(e) {
+        //     e.preventDefault();
+        //     this.$router.push(`/search?q=${this.query}`);
+        // }
     }
 }
 </script>
 
 
 <template>
-    <div class="sticky-top bg-body-tertiary">
+    <div class="sticky-top" style="background-color: #fff;">
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <router-link to="/" class="navbar-brand">eRialto</router-link>
@@ -21,7 +32,6 @@ export default {
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div v-if="isLoggedIn" class="navbar-nav" id="nav">
                         <router-link to="/profile" class="nav-link">Profile</router-link>
-                        <router-link to="/products" class="nav-link">Products</router-link>
                         <router-link to="/logout" class="nav-link">Logout</router-link>
                     </div>
                     <div v-else class="navbar-nav" id="nav">
@@ -31,13 +41,32 @@ export default {
                 </div>
             </div>
         </nav>
-        <div class="d-flex flex-row mt-2 pb-4">
+        <div v-if="isLoggedIn" class="d-flex flex-row mt-2 pb-4">
             <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Categories
             </button>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search products" aria-label="Username"
-                    aria-describedby="basic-addon1">
+                <form class="d-flex flex-fill" action="/search">
+                    <input v-model="query" type="text" class="form-control" placeholder="Search products"
+                        aria-label="Username" aria-describedby="basic-addon1" name="q">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
