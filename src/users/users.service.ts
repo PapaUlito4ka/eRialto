@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import UserProfile from './entities/user-profile.entity';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,8 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     @InjectRepository(UserProfile)
-    private usersProfilesRepository: Repository<UserProfile>
+    private usersProfilesRepository: Repository<UserProfile>,
+    private imagesService: ImagesService
   ) { }
 
   async create(createUserDto: CreateUserDto) {
@@ -67,5 +69,13 @@ export class UsersService {
 
   async myProducts(user: User) {
     // TODO: get user products (filter)
+  }
+
+  async uploadProfileImage(user: User, file: Express.Multer.File) {
+    const curProfileImage = await this.imagesService.findUserProfileImage(user.profile);
+    if (curProfileImage) {
+      return this.imagesService.update(curProfileImage, file);
+    }
+    return this.imagesService.create(file);
   }
 }
