@@ -1,11 +1,12 @@
 import type UserProfile from "src/users/entities/user-profile.entity";
 import type Product from "src/products/entities/product.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CreateUpdateMixin } from "../../mixins/create-update.mixin";
 
 @Entity({
     name: 'images'
 })
-export class Image {
+export class Image extends CreateUpdateMixin {
     @PrimaryGeneratedColumn('identity', {
         generatedIdentity: 'ALWAYS',
     })

@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { Paginate, PaginateQuery } from 'nestjs-paginate';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)
@@ -16,19 +17,14 @@ export class UsersController {
     return this.usersService.getUserProfile(req.user);
   }
 
-  @Get('my-products')
-  myProducts(@Request() req) {
-    return this.usersService.myProducts(req.user);
+  @Get('products')
+  userProducts(@Request() req, @Paginate() query: PaginateQuery) {
+    return this.usersService.userProducts(req.user, query);
   }
 
   @Patch()
   update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(req.user, updateUserDto);
-  }
-
-  @Delete()
-  remove(@Request() req) {
-    return this.usersService.remove(req.user);
   }
 
   @Post('profile-image')

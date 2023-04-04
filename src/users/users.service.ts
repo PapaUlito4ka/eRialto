@@ -7,6 +7,8 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import UserProfile from './entities/user-profile.entity';
 import { ImagesService } from 'src/images/images.service';
+import { ProductsService } from 'src/products/products.service';
+import { PaginateQuery } from 'nestjs-paginate';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +17,8 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @InjectRepository(UserProfile)
     private usersProfilesRepository: Repository<UserProfile>,
-    private imagesService: ImagesService
+    private imagesService: ImagesService,
+    private productsService: ProductsService
   ) { }
 
   async create(createUserDto: CreateUserDto) {
@@ -67,8 +70,8 @@ export class UsersService {
     return this.usersRepository.remove(user);
   }
 
-  async myProducts(user: User) {
-    // TODO: get user products (filter)
+  async userProducts(user: User, query: PaginateQuery) {
+    return this.productsService.findUserProducts(user, query);
   }
 
   async uploadProfileImage(user: User, file: Express.Multer.File) {
@@ -76,6 +79,6 @@ export class UsersService {
     if (curProfileImage) {
       return this.imagesService.update(curProfileImage, file);
     }
-    return this.imagesService.create(file);
+    return this.imagesService.createProfileImage(file, user.profile);
   }
 }

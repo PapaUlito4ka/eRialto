@@ -7,20 +7,24 @@ import { Repository } from 'typeorm';
 import { PaginateQuery, paginate } from 'nestjs-paginate';
 import { productsPaginateConfig } from './paginate.config';
 import User from 'src/users/entities/user.entity';
+import { ImagesService } from 'src/images/images.service';
+import type Image from 'src/images/entities/image.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private productsRepository: Repository<Product>
+    private productsRepository: Repository<Product>,
+    private imageService: ImagesService
   ) { }
 
-  async create(user: User, createProductDto: CreateProductDto) {
+  async create(user: User, createProductDto: CreateProductDto, files: Express.Multer.File[]) {
     const newProduct = this.productsRepository.create(createProductDto);
 
     newProduct.user = user;
 
     await this.productsRepository.save(newProduct);
+    await this.uploadProductImages(newProduct, files);
     return newProduct;
   }
 
@@ -43,5 +47,21 @@ export class ProductsService {
   async remove(id: number) {
     const product = await this.findOne(id);
     return this.productsRepository.remove(product);
+  }
+
+  async findUserProducts(user: User, query: PaginateQuery) {
+    const queryBuilder = this.productsRepository
+      .createQueryBuilder('products')
+      .leftJoinAndSelect('products', 'products.user')
+      .leftJoinAndSelect('products', 'products.category')
+      .leftJoinAndSelect('products', 'products.images')
+      .where('products.user = :userId', { userId: user.id })
+      .orderBy('createdAt', 'DESC');
+
+    return paginate(query, queryBuilder, productsPaginateConfig);
+  }
+
+  async uploadProductImages(product: Product, files: Express.Multer.File[]) {
+    return this.imageService.createProductsImages(files, product);
   }
 }
