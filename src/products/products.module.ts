@@ -6,12 +6,14 @@ import User from '../users/entities/user.entity';
 import UserProfile from 'src/users/entities/user-profile.entity';
 import Product from './entities/product.entity';
 import Category from 'src/categories/entities/category.entity';
+import { ImagesService } from 'src/images/images.service';
+import Image from 'src/images/entities/image.entity';
 
 @Module({
   controllers: [ProductsController],
-  providers: [ProductsService],
+  providers: [ProductsService, ImagesService],
   imports: [
-    TypeOrmModule.forFeature([User, UserProfile, Product, Category])
+    TypeOrmModule.forFeature([User, UserProfile, Product, Category, Image])
   ]
 })
 export class ProductsModule {}

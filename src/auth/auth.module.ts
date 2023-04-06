@@ -13,6 +13,9 @@ import User from 'src/users/entities/user.entity';
 import { RefreshJwtStrategy } from './refresh-jwt.strategy';
 import UserProfile from 'src/users/entities/user-profile.entity';
 import Product from 'src/products/entities/product.entity';
+import { ProductsService } from 'src/products/products.service';
+import { ImagesService } from 'src/images/images.service';
+import Image from 'src/images/entities/image.entity';
 
 @Module({
   imports: [
@@ -26,10 +29,10 @@ import Product from 'src/products/entities/product.entity';
         secret: configService.get('JWT_SECRET'),
       }),
     }),
-    TypeOrmModule.forFeature([User, UserProfile, Product])
+    TypeOrmModule.forFeature([User, UserProfile, Product, Image])
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RefreshJwtStrategy, LocalStrategy, UsersService],
+  providers: [AuthService, JwtStrategy, RefreshJwtStrategy, LocalStrategy, UsersService, ProductsService, ImagesService],
   exports: [AuthService]
 })
 export class AuthModule { }

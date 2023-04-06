@@ -17,8 +17,8 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @InjectRepository(UserProfile)
     private usersProfilesRepository: Repository<UserProfile>,
+    private productsService: ProductsService,
     private imagesService: ImagesService,
-    private productsService: ProductsService
   ) { }
 
   async create(createUserDto: CreateUserDto) {
