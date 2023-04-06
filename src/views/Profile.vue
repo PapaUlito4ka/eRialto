@@ -21,9 +21,9 @@ export default {
 
 
 <template>
-    <div class="row">
+    <div class="d-flex flex-row">
 
-        <div class="col-3">
+        <div class="me-3">
             <div class="mb-3 d-flex flex-column align-items-center">
                 <img src="https://placehold.co/250x250" class="rounded mb-2">
                 <p class="fs-5 fw-semibold">Artem Martyakhin</p>
@@ -34,7 +34,7 @@ export default {
             </div>
         </div>
 
-        <div class="col-9 ps-0">
+        <div class="kekos">
             <div class="mb-3">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">

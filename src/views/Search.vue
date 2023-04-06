@@ -28,7 +28,7 @@ export default {
 
 
 <template>
-    <div class="mt-3">
+    <div class="mt-2">
         <h1>Products for search "{{ this.query }}"</h1>
         <div class="row">
             <div class="col-3">
