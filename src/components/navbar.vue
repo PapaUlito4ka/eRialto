@@ -23,16 +23,29 @@ export default {
 <template>
     <div class="sticky-top" style="background-color: #fff;">
         <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <router-link to="/" class="navbar-brand">eRialto</router-link>
+            <div class="container-fluid px-0">
+                <router-link to="/" class="navbar-brand fs-4">eRialto</router-link>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                     aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                     <div v-if="isLoggedIn" class="navbar-nav" id="nav">
-                        <router-link to="/profile" class="nav-link">Profile</router-link>
-                        <router-link to="/logout" class="nav-link">Logout</router-link>
+                        <router-link to="#" class="nav-link" style="padding-top: 6px;"><i class="bi bi-heart fs-5"></i></router-link>
+                        <router-link to="#" class="nav-link me-3 py-1"><i class="bi bi-chat fs-5"></i></router-link>
+                        <router-link to="/profile" class="nav-link me-3">My products</router-link>
+                        <li class="nav-item dropdown me-3">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                aria-expanded="false">Artem</a>
+                            <ul class="dropdown-menu">
+                                <li><router-link to="/profile" class="dropdown-item">My profile</router-link></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><router-link to="/logout" class="dropdown-item">Logout</router-link></li>
+                            </ul>
+                        </li>
+                        <router-link to="#" class="btn btn-primary" role="button">Publish product</router-link>
                     </div>
                     <div v-else class="navbar-nav" id="nav">
                         <router-link to="/sign-in" class="nav-link">Sign&nbsp;in</router-link>
@@ -69,5 +82,4 @@ export default {
                 </div>
             </div>
         </div>
-    </div>
-</template>
+</div></template>

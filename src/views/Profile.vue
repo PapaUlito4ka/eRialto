@@ -29,22 +29,52 @@ export default {
                 <p class="fs-5 fw-semibold">Artem Martyakhin</p>
             </div>
 
-            <div class="mt-3 d-flex flex-column align-items-center">
-                <p>Profile buttons</p>
+            <div class="mt-3 d-flex flex-column align-items-start">
+                <div class="d-flex flex-fill flex-column">
+                    <div class="mb-2">
+                        <a href="#">My products</a>
+                    </div>
+                    <div class="mb-2">
+                        <a href="#">My reviews</a>
+                    </div>
+                    <div>
+                        <a href="#">Favourites</a>
+                    </div>
+                </div>
+                <div class="w-100">
+                    <hr>
+                </div>
+                <div class="d-flex flex-fill flex-column">
+                    <div class="mb-2">
+                        <a href="#">Messages</a>
+                    </div>
+                    <div>
+                        <a href="#">Notifications</a>
+                    </div>
+                </div>
+                <div class="w-100">
+                    <hr>
+                </div>
+                <div class="d-flex flex-fill flex-column">
+                    <div class="mb-2">
+                        <a href="#">Profile</a>
+                    </div>
+                    <div>
+                        <a href="#">Settings</a>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="kekos">
+            <h2 class="mb-3">My products</h2>
             <div class="mb-3">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Active</a>
+                        <a class="nav-link" href="#">Active</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Archived</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
                     </li>
                 </ul>
             </div>
