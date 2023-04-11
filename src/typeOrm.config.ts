@@ -6,6 +6,7 @@ import { UserProfile } from './users/entities/user-profile.entity';
 import { Product } from './products/entities/product.entity';
 import { Category } from './categories/entities/category.entity';
 import { Image } from './images/entities/image.entity';
+import { Review } from './reviews/entities/review.entity';
  
 config();
  
@@ -18,6 +19,6 @@ export default new DataSource({
   username: configService.get('POSTGRES_USER'),
   password: configService.get('POSTGRES_PASSWORD'),
   database: configService.get('POSTGRES_DB'),
-  entities: [User, UserProfile, Product, Category, Image],
+  entities: [User, UserProfile, Product, Category, Image, Review],
   migrations: ['src/migrations/*{.ts,.js}']
 });

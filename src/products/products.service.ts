@@ -33,7 +33,7 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
-    const product = this.productsRepository.findOneBy({ id: id });
+    const product = await this.productsRepository.findOneBy({ id: id });
     if (product) return product;
     throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
   }
@@ -52,11 +52,11 @@ export class ProductsService {
   async findUserProducts(user: User, query: PaginateQuery) {
     const queryBuilder = this.productsRepository
       .createQueryBuilder('products')
-      .leftJoinAndSelect('products', 'products.user')
-      .leftJoinAndSelect('products', 'products.category')
-      .leftJoinAndSelect('products', 'products.images')
+      .leftJoinAndSelect('products.user', 'user')
+      .leftJoinAndSelect('products.category', 'category')
+      .leftJoinAndSelect('products.images', 'images')
       .where('products.user = :userId', { userId: user.id })
-      .orderBy('createdAt', 'DESC');
+      .orderBy('products."createdAt"', 'DESC');
 
     return paginate(query, queryBuilder, productsPaginateConfig);
   }

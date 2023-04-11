@@ -39,8 +39,9 @@ export class UsersService {
   }
 
   async getUserProfile(user: User) {
-    const userProfile = await this.usersProfilesRepository.findOne(
-      { relations: { user: true }, where: { user: { id: user.id } } }
+    const userProfile = await this.usersProfilesRepository.findOne({ 
+      relations: { user: true, image: true }, 
+      where: { user: { id: user.id } } }
     );
     if (userProfile) return userProfile;
     throw new HttpException('User profile does not exist', HttpStatus.NOT_FOUND);

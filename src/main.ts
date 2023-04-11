@@ -11,7 +11,7 @@ async function bootstrap() {
       return new BadRequestException(validationErrors, validationErrors.join(';'));
     },
   }));
-  app.useGlobalFilters(new GlobalExceptionFilter());
+  // app.useGlobalFilters(new GlobalExceptionFilter());
 
   await app.listen(3000);
 }

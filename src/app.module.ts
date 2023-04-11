@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ChatModule } from './chat/chat.module';
 import { ImagesModule } from './images/images.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 config();
 
@@ -34,6 +35,7 @@ config();
     CategoriesModule,
     ChatModule,
     ImagesModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

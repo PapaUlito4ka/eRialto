@@ -47,6 +47,11 @@ export class Product extends CreateUpdateMixin {
     })
     address: string;
 
+    @Column({
+        default: false
+    })
+    isArchived: boolean;
+
     @OneToMany('Image', 'product', {
         onDelete: "CASCADE"
     })

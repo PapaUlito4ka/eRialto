@@ -32,7 +32,8 @@ export class UserProfile extends CreateUpdateMixin {
     lastname: string;
 
     @OneToOne('Image', 'userProfile', {
-        onDelete: "CASCADE"
+        nullable: true,
+        onDelete: "SET NULL"
     })
     image: Image;
 }

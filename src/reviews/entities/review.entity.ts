@@ -1,12 +1,12 @@
-import type UserProfile from "src/users/entities/user-profile.entity";
-import type Product from "src/products/entities/product.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CreateUpdateMixin } from "../../mixins/create-update.mixin";
+import { Max, Min } from "class-validator";
+import type User from "src/users/entities/user.entity";
 
 @Entity({
-    name: 'images'
+    name: 'reviews'
 })
-export class Image extends CreateUpdateMixin {
+export class Review extends CreateUpdateMixin {
     @PrimaryGeneratedColumn('identity', {
         generatedIdentity: 'ALWAYS',
     })
@@ -16,26 +16,26 @@ export class Image extends CreateUpdateMixin {
         length: 256,
         nullable: false
     })
-    filename: String;
+    body: String;
 
     @Column({
-        length: 256,
         nullable: false
     })
-    path: String;
+    @Min(0)
+    @Max(5)
+    rating: Number;
 
-    @OneToOne('User', 'image', {
-        nullable: true,
+    @ManyToOne('Product', {
+        nullable: false,
         onDelete: "CASCADE"
     })
-    @JoinColumn()
-    userProfile: UserProfile;
+    fromUser: User;
 
-    @ManyToOne('Product', 'images', {
-        nullable: true,
+    @ManyToOne('Product', {
+        nullable: false,
         onDelete: "CASCADE"
     })
-    product: Product;
+    toUser: User;
 }
 
-export default Image;
+export default Review;
