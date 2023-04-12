@@ -32,7 +32,11 @@ router.beforeEach((to, from, next) => {
             next();
         }
     } else {
-        next();
+        if (store.getters.isLoggedIn) {
+            next({ name: 'Home' });
+        } else {
+            next();
+        }
     }
 });
 

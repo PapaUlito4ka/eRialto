@@ -27,7 +27,7 @@ export default new Store({
     actions: {},
     getters: {
         isLoggedIn(state) {
-            return !!state.accessToken;
+            return !!state.user;
         }
     },
 });
