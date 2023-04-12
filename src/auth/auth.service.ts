@@ -42,7 +42,8 @@ export class AuthService {
       }),
       refresh_token: this.jwtService.sign(refreshPayload, {
         expiresIn: `${this.configService.get('JWT_REFRESH_TOKEN_EXP_TIME')}s`
-      })
+      }),
+      user: user
     };
   }
 

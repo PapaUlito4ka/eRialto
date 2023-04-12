@@ -39,9 +39,10 @@ export class UsersService {
   }
 
   async getUserProfile(user: User) {
-    const userProfile = await this.usersProfilesRepository.findOne({ 
-      relations: { user: true, image: true }, 
-      where: { user: { id: user.id } } }
+    const userProfile = await this.usersProfilesRepository.findOne({
+      relations: { user: true, image: true },
+      where: { user: { id: user.id } }
+    }
     );
     if (userProfile) return userProfile;
     throw new HttpException('User profile does not exist', HttpStatus.NOT_FOUND);
@@ -54,7 +55,10 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string) {
-    const user = await this.usersRepository.findOne({ 'where': { email: email } });
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+      relations: { profile: true }
+    });
     if (user) return user;
     throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);
   }
