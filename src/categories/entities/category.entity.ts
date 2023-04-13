@@ -1,3 +1,4 @@
+import { IsNotEmpty } from 'class-validator';
 import type { Product } from 'src/products/entities/product.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -15,6 +16,7 @@ export class Category {
         nullable: false,
         unique: true
     })
+    @IsNotEmpty()
     name: String;
 
     @OneToMany('Product', 'category', {

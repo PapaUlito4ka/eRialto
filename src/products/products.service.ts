@@ -9,18 +9,22 @@ import { productsPaginateConfig } from './paginate.config';
 import User from 'src/users/entities/user.entity';
 import { ImagesService } from 'src/images/images.service';
 import type Image from 'src/images/entities/image.entity';
+import { CategoriesService } from 'src/categories/categories.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
-    private imageService: ImagesService
+    private imageService: ImagesService,
+    private categoriesService: CategoriesService
   ) { }
 
   async create(user: User, createProductDto: CreateProductDto, files: Express.Multer.File[]) {
     const newProduct = this.productsRepository.create(createProductDto);
+    const category = await this.categoriesService.findOne(createProductDto.categoryId);
 
+    newProduct.category = category;
     newProduct.user = user;
 
     await this.productsRepository.save(newProduct);

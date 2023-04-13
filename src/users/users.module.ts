@@ -8,12 +8,14 @@ import { User } from './entities/user.entity';
 import { ImagesService } from 'src/images/images.service';
 import Image from 'src/images/entities/image.entity';
 import { ProductsService } from 'src/products/products.service';
+import Category from 'src/categories/entities/category.entity';
+import { CategoriesService } from 'src/categories/categories.service';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService, ImagesService, ProductsService],
+  providers: [UsersService, ImagesService, ProductsService, CategoriesService],
   imports: [
-    TypeOrmModule.forFeature([User, UserProfile, Product, Image])
+    TypeOrmModule.forFeature([User, UserProfile, Product, Image, Category])
   ]
 })
 export class UsersModule { }

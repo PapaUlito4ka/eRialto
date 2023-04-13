@@ -28,7 +28,7 @@ export class CategoriesService {
   async findOne(id: number) {
     const category = await this.categoriesRepository.findOneBy({ id: id });
     if (category) return category;
-    throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
+    throw new HttpException('Category does not exist', HttpStatus.NOT_FOUND);
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
