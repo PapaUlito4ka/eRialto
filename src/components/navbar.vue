@@ -3,7 +3,7 @@ import { mapGetters } from "vuex";
 
 export default {
     computed: {
-        ...mapGetters(["isLoggedIn"])
+        ...mapGetters(["isLoggedIn", "getFirstname"])
     },
     data() {
         return {
@@ -36,7 +36,7 @@ export default {
                         <router-link to="/profile" class="nav-link me-3">My products</router-link>
                         <li class="nav-item dropdown me-3">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                                aria-expanded="false">Artem</a>
+                                aria-expanded="false">{{ getFirstname }}</a>
                             <ul class="dropdown-menu">
                                 <li><router-link to="/profile" class="dropdown-item">My profile</router-link></li>
                                 <li>
@@ -45,7 +45,7 @@ export default {
                                 <li><router-link to="/logout" class="dropdown-item">Logout</router-link></li>
                             </ul>
                         </li>
-                        <router-link to="#" class="btn btn-primary" role="button">Publish product</router-link>
+                        <router-link to="/create-product" class="btn btn-primary" role="button">Publish product</router-link>
                     </div>
                     <div v-else class="navbar-nav" id="nav">
                         <router-link to="/sign-in" class="nav-link">Sign&nbsp;in</router-link>

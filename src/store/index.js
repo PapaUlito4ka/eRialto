@@ -8,8 +8,8 @@ export default new Store({
     },
     mutations: {
         setUser(state, user) {
-            state.user = user;
-            localStorage.setItem('user', user);
+            state.user = JSON.stringify(user);
+            localStorage.setItem('user', JSON.stringify(user));
         },
         setAccessToken(state, token) {
             state.accessToken = token;
@@ -28,6 +28,14 @@ export default new Store({
     getters: {
         isLoggedIn(state) {
             return !!state.user;
+        },
+        getFirstname(state) {
+            let user = JSON.parse(state.user);
+            return user.profile.firstname;
+        },
+        getFullname(state) {
+            let user = JSON.parse(state.user);
+            return user.profile.firstname + ' ' + user.profile.lastname;
         }
     },
 });
