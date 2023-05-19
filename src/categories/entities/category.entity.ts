@@ -1,6 +1,6 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, Min } from 'class-validator';
 import type { Product } from 'src/products/entities/product.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
     name: 'categories'
@@ -18,6 +18,14 @@ export class Category {
     })
     @IsNotEmpty()
     name: String;
+
+
+    @ManyToOne('Category', {
+        nullable: true,
+        onDelete: "CASCADE"
+    })
+    parentCategory: Category;
+
 
     @OneToMany('Product', 'category', {
         onDelete: "CASCADE"

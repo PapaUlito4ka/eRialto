@@ -22,7 +22,22 @@ export class CategoriesService {
   }
 
   async findAll(query: PaginateQuery) {
-    return paginate(query, this.categoriesRepository, categoriesPaginateConfig);
+    const categories = await this.categoriesRepository.createQueryBuilder('category')
+      .leftJoinAndSelect('category.parentCategory', 'parentCategory')
+      .getMany();
+
+    const rootCategories = categories.filter(cat => cat.parentCategory === null);
+    let categoriesData = new Object();
+
+    for (let rootCategory of rootCategories) {
+      categoriesData[rootCategory.name.toString()] = categories
+        .filter(
+          cat => cat.parentCategory !== null && cat.parentCategory.id === rootCategory.id
+        )
+        .map(cat => cat.name);
+    }
+
+    return categoriesData;
   }
 
   async findOne(id: number) {
