@@ -28,13 +28,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!store.getters.isLoggedIn) {
+        if (!store.state.user) {
             next({ name: 'SignIn' });
         } else {
             next();
         }
     } else {
-        if (store.getters.isLoggedIn) {
+        if (store.state.user) {
             next({ name: 'Home' });
         } else {
             next();

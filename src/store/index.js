@@ -36,6 +36,12 @@ export default new Store({
         getFullname(state) {
             let user = JSON.parse(state.user);
             return user.profile.firstname + ' ' + user.profile.lastname;
+        },
+        getAccessToken(state) {
+            return state.accessToken;
+        },
+        getRefreshToken(state) {
+            return state.refreshToken;
         }
     },
 });

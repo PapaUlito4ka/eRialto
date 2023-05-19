@@ -29,10 +29,10 @@ export default {
                     password: this.password
                 })
                 .then(res => {
-                    let data = res.data
+                    const data = res.data
                     this.setUser(data.user)
-                    this.setAccessToken(data.accessToken)
-                    this.setRefreshToken(data.refreshToken)
+                    this.setAccessToken(data.access_token)
+                    this.setRefreshToken(data.refresh_token)
                     this.$router.push('/')
                 })
                 .catch(e => {
