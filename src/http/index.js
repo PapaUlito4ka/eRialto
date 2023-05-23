@@ -9,7 +9,7 @@ function clearUserSession() {
 }
 
 function setAccessToken(token) {
-  state.accessToken = token;
+  store.state.accessToken = token;
   localStorage.setItem('accessToken', token);
 }
 
@@ -31,7 +31,7 @@ Axios.interceptors.response.use(function (response) {
           }
         });
       console.log(res.data);
-      setAccessToken(res.data.accessToken);
+      setAccessToken(res.data.access_token);
     } catch (e) {
       console.log(e);
       clearUserSession();
