@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { PaginateQuery, paginate } from 'nestjs-paginate';
 import { productsPaginateConfig } from './paginate.config';
 import User from 'src/users/entities/user.entity';
@@ -17,23 +17,40 @@ export class ProductsService {
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
     private imageService: ImagesService,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private dataSource: DataSource
   ) { }
 
   async create(user: User, createProductDto: CreateProductDto, files: Express.Multer.File[]) {
-    const newProduct = this.productsRepository.create(createProductDto);
-    const category = await this.categoriesService.findOne(createProductDto.categoryId);
+    const category = await this.categoriesService.findOneByName(createProductDto.category);
+    const newProduct = this.productsRepository.create({
+      name: createProductDto.name,
+      description: createProductDto.description,
+      price: createProductDto.price,
+      address: createProductDto.address
+    });
 
     newProduct.category = category;
     newProduct.user = user;
 
-    await this.productsRepository.save(newProduct);
-    await this.uploadProductImages(newProduct, files);
+    const productImages = await this.uploadProductImages(newProduct, files);
+    await this.dataSource.transaction(async (transactionManager: EntityManager) => {
+      await transactionManager.save(newProduct);
+      await transactionManager.save(productImages);
+    });
+
     return newProduct;
   }
 
   async findAll(query: PaginateQuery) {
-    return paginate(query, this.productsRepository, productsPaginateConfig);
+    const queryBuilder = this.productsRepository
+      .createQueryBuilder('products')
+      .leftJoinAndSelect('products.user', 'user')
+      .leftJoinAndSelect('products.category', 'category')
+      .leftJoinAndSelect('products.images', 'images')
+      .orderBy('products."createdAt"', 'DESC');
+    
+    return paginate(query, queryBuilder, productsPaginateConfig);
   }
 
   async findOne(id: number) {
@@ -43,9 +60,16 @@ export class ProductsService {
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
-    await this.findOne(id);
-    await this.productsRepository.update({ id: id }, updateProductDto);
-    return this.findOne(id);
+    const product = await this.findOne(id);
+    const category = await this.categoriesService.findOneByName(updateProductDto.category);
+
+    product.name = updateProductDto.name;
+    product.description = updateProductDto.description;
+    product.price = updateProductDto.price;
+    product.address = updateProductDto.address;
+    product.category = category;
+
+    return await this.productsRepository.save(product);
   }
 
   async remove(id: number) {

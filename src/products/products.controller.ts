@@ -5,7 +5,8 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { diskStorage } from 'multer';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import * as path from 'path';
 
 @Controller('products')
 @UseGuards(JwtAuthGuard)
@@ -13,9 +14,12 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file', {
+  @UseInterceptors(FilesInterceptor('images', 5, {
     storage: diskStorage({
-      destination: '../media/product_images'
+      destination: 'src/media/product_images',
+      filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname))
+      }
     })
   }))
   create(@Request() req, @Body() createProductDto: CreateProductDto, @UploadedFiles() files: Express.Multer.File[]) {

@@ -47,7 +47,7 @@ export class Product extends CreateUpdateMixin {
     price: Number;
 
     @Column({
-        length: 64,
+        length: 256,
         nullable: false
     })
     @IsNotEmpty()

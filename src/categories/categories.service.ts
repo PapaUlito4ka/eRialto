@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import Category from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginateQuery, paginate } from 'nestjs-paginate';
@@ -42,6 +42,12 @@ export class CategoriesService {
 
   async findOne(id: number) {
     const category = await this.categoriesRepository.findOneBy({ id: id });
+    if (category) return category;
+    throw new HttpException('Category does not exist', HttpStatus.NOT_FOUND);
+  }
+
+  async findOneByName(name: string) {
+    const category = await this.categoriesRepository.findOneBy({ name: Like(name) });
     if (category) return category;
     throw new HttpException('Category does not exist', HttpStatus.NOT_FOUND);
   }

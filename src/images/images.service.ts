@@ -27,19 +27,18 @@ export class ImagesService {
   }
 
   async createProductsImages(files: Express.Multer.File[], product: Product): Promise<Image[]> {
-    let createdImages = [];
+    let createdImages: Image[] = [];
 
-    for (const file of files) {
+    for (let i = 0; i < files.length; i++) {
+      const file = files.at(i);
       const newImage = this.imagesRepository.create();
 
       newImage.filename = file.filename;
-      newImage.path = file.path;
+      newImage.path = file.path.slice(3);
       newImage.product = product;
 
-      createdImages.push(this.imagesRepository.save(newImage));
+      createdImages.push(newImage);
     }
-
-    await Promise.allSettled(createdImages);
 
     return createdImages;
   }
