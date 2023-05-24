@@ -14,7 +14,13 @@ export default {
             selectedRootCategory: '',
 
             categoriesData: null,
-            map: null
+
+            category: '',
+            name: '',
+            description: '',
+            price: NaN,
+            address: '',
+            images: []
         }
     },
     methods: {
@@ -54,85 +60,98 @@ export default {
             console.log('Selected:', event.target.value)
             this.selectedRootCategory = event.target.value
         },
-        init() {
+        uploadImages() {
+            this.images = Array.prototype.slice.call(this.$refs.imagesInput.files, 0, 5)
+            console.log(this.images)
+        },
+        initMap() {
             var myPlacemark,
                 myMap = new ymaps.Map('map', {
                     center: [55.753994, 37.622093],
                     zoom: 9
                 }, {
                     searchControlProvider: 'yandex#search'
-                });
+                })
 
-            this.map = myMap
-
-            // Слушаем клик на карте.
             myMap.events.add('click', function (e) {
-                var coords = e.get('coords');
+                var coords = e.get('coords')
 
-                // Если метка уже создана – просто передвигаем ее.
                 if (myPlacemark) {
-                    myPlacemark.geometry.setCoordinates(coords);
-                }
-                // Если нет – создаем.
-                else {
-                    myPlacemark = createPlacemark(coords);
-                    myMap.geoObjects.add(myPlacemark);
-                    // Слушаем событие окончания перетаскивания на метке.
+                    myPlacemark.geometry.setCoordinates(coords)
+                } else {
+                    myPlacemark = createPlacemark(coords)
+                    myMap.geoObjects.add(myPlacemark)
                     myPlacemark.events.add('dragend', function () {
-                        getAddress(myPlacemark.geometry.getCoordinates());
-                    });
+                        getAddress(myPlacemark.geometry.getCoordinates())
+                    })
                 }
-                getAddress(coords);
-            });
+                getAddress(coords)
+            })
 
-            // Создание метки.
             function createPlacemark(coords) {
                 return new ymaps.Placemark(coords, {
                     iconCaption: 'поиск...'
                 }, {
                     preset: 'islands#violetDotIconWithCaption',
                     draggable: true
-                });
+                })
             }
 
-            // Определяем адрес по координатам (обратное геокодирование).
+            function setAddress(address) {
+                document.getElementById('addressId').value = address
+            }
+
             function getAddress(coords) {
-                myPlacemark.properties.set('iconCaption', 'поиск...');
+                myPlacemark.properties.set('iconCaption', 'поиск...')
                 ymaps.geocode(coords).then(function (res) {
-                    var firstGeoObject = res.geoObjects.get(0);
+                    var firstGeoObject = res.geoObjects.get(0)
+                    var address = [
+                        firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                        firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                    ].filter(Boolean).join(', ')
 
                     myPlacemark.properties
                         .set({
-                            // Формируем строку с данными об объекте.
-                            iconCaption: [
-                                // Название населенного пункта или вышестоящее административно-территориальное образование.
-                                firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
-                                // Получаем путь до топонима, если метод вернул null, запрашиваем наименование здания.
-                                firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
-                            ].filter(Boolean).join(', '),
-                            // В качестве контента балуна задаем строку с адресом объекта.
+                            iconCaption: address,
                             balloonContent: firstGeoObject.getAddressLine()
-                        });
-                });
+                        })
+                    setAddress(firstGeoObject.getAddressLine())
+                })
             }
-        }
+        },
+        clearMap() {
+            document.getElementById('map').replaceChildren()
+        },
+        createProduct(e) {
+            let formData = new FormData()
+            e.preventDefault()
 
+            formData.append('category', this.category)
+            formData.append('name', this.name)
+            formData.append('description', this.description)
+            formData.append('price', this.price)
+            formData.append('address', this.address)
+            formData.append('images', this.images)
+
+            Axios
+                .post('/products', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${this.getAccessToken}`
+                    }
+                })
+                .then(res => {
+                    console.log(res.data)
+                })
+                .catch(e => {
+                    console.log(e.response)
+                })
+        }
     },
     mounted() {
+        this.clearMap()
         this.fetchCategories()
-
-        document.getElementById('map').replaceChildren()
-
-        // let ymapsScript = document.createElement('script')
-        // ymapsScript.setAttribute('src', 'https://api-maps.yandex.ru/2.1/?apikey=cc2220de-d942-4b1c-8798-fb61c28d42b8&lang=ru-RU')
-        // document.head.appendChild(ymapsScript)
-
-        // ymaps.ready(this.init)
-        setTimeout(this.init, 1000)
-    },
-    beforeUnmount() {
-        // document.getElementById('map').remove()
-        // this.map.destroy()
+        setTimeout(this.initMap, 1000)
     }
 }
 </script>
@@ -142,7 +161,7 @@ export default {
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-            <form>
+            <form @submit.prevent="createProduct">
                 <div class="mb-3">
                     <label for="categoryId" class="form-label">Select category</label>
                     <select @change="rootCategoryChange($event)" class="form-select" id="categoryId" required>
@@ -152,7 +171,7 @@ export default {
                 </div>
                 <div v-if="selectedRootCategory" class="mb-3">
                     <label for="subCategoryId" class="form-label">Select sub category</label>
-                    <select class="form-select" id="subCategoryId" required>
+                    <select v-model="category" class="form-select" id="subCategoryId" required>
                         <option disabled selected value> -- select an option -- </option>
                         <option v-for="childCategory in categoriesData[selectedRootCategory]" :value="childCategory">{{
                             childCategory }}</option>
@@ -160,31 +179,29 @@ export default {
                 </div>
                 <div class="mb-3">
                     <label for="nameId" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="nameId" maxlength="128" name="name">
+                    <input v-model="name" type="text" class="form-control" id="nameId" maxlength="128">
                 </div>
                 <div class="mb-3">
                     <label for="descriptionId" class="form-label">Description</label>
-                    <textarea class="form-control" id="descriptionId" rows="3" maxlength="512"></textarea>
+                    <textarea v-model="description" class="form-control" id="descriptionId" rows="3"
+                        maxlength="512"></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="priceId" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="priceId" min="1">
+                    <input v-model="price" type="number" class="form-control" id="priceId" min="1">
                 </div>
                 <div class="mb-3">
                     <label for="addressId" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="addressId" maxlength="64">
+                    <input v-model="address" type="text" class="form-control" id="addressId" maxlength="64">
                 </div>
-
                 <div class="mb-3">
                     <div id="map" style="height: 400px"></div>
                 </div>
-
                 <div class="mb-3">
                     <label for="imagesId" class="form-label">Images</label>
-                    <input class="form-control" type="file" accept="image/*" id="imagesId" multiple>
+                    <input v-on:change="uploadImages" class="form-control" type="file" accept="image/*" id="imagesId"
+                        multiple ref="imagesInput">
                 </div>
-
-
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
