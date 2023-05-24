@@ -53,7 +53,10 @@ export default {
         </div>
 
         <div class="d-flex flex-column flex-fill">
-            <p class="m-0 fw-bold fs-5">{{ title }}</p>
+            <div class="d-flex flex-row justify-content-between">
+                <h5 class="card-title" onclick="location.href='#';" style="cursor: pointer;">{{ title }}</h5>
+                <div><a style="cursor: pointer;"><i class="bi bi-heart fs-5"></i></a></div>
+            </div>
             <p class="m-0 fs-5">{{ price }}&nbsp;$</p>
             <small class="m-0 text-body-secondary mb-1">{{ description }}</small>
             <small class="m-0 text-body-secondary">{{ address }}</small>

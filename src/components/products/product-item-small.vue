@@ -19,8 +19,8 @@ export default {
 
         <div :id="`carouselExampleIndicators${idx}`" class="carousel slide card-img-top" data-bs-ride="true">
             <div class="carousel-indicators">
-                <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="0"
+                    class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="1"
                     aria-label="Slide 2"></button>
                 <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="2"
@@ -53,7 +53,10 @@ export default {
         </div>
 
         <div class="card-body">
-            <h5 class="card-title" onclick="location.href='#';" style="cursor: pointer;">{{ title }}</h5>
+            <div class="d-flex flex-row justify-content-between">
+                <h5 class="card-title" onclick="location.href='#';" style="cursor: pointer;">{{ title }}</h5>
+                <div><a style="cursor: pointer;"><i class="bi bi-heart fs-5"></i></a></div>
+            </div>
             <p class="m-0 fs-5 fw-bold">{{ price }}&nbsp;$</p>
             <small class="m-0 text-body-secondary">{{ address }}</small><br />
             <small class="m-0 text-body-secondary">{{ date }}</small>

@@ -18,7 +18,7 @@ export default {
             category: '',
             name: '',
             description: '',
-            price: NaN,
+            price: null,
             address: '',
             images: []
         }
@@ -65,6 +65,7 @@ export default {
             console.log(this.images)
         },
         initMap() {
+            var self = this
             var myPlacemark,
                 myMap = new ymaps.Map('map', {
                     center: [55.753994, 37.622093],
@@ -99,6 +100,7 @@ export default {
 
             function setAddress(address) {
                 document.getElementById('addressId').value = address
+                self.address = address
             }
 
             function getAddress(coords) {
@@ -131,7 +133,9 @@ export default {
             formData.append('description', this.description)
             formData.append('price', this.price)
             formData.append('address', this.address)
-            formData.append('images', this.images)
+            for (let image of this.images) {
+                formData.append('images', image, image.filename)
+            }
 
             Axios
                 .post('/products', formData, {
@@ -141,7 +145,7 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log(res.data)
+                    this.$router.push('/profile')
                 })
                 .catch(e => {
                     console.log(e.response)
