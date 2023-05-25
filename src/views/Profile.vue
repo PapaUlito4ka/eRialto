@@ -1,20 +1,57 @@
 <script>
+import { mapGetters } from "vuex";
+import { Axios } from '../http';
 import ProductsList from '../components/products/products-list.vue';
 
 export default {
+    computed: {
+        ...mapGetters(["isLoggedIn", "getFirstname", "getAccessToken"])
+    },
     components: { ProductsList },
     data() {
         return {
+            firstname: '',
+            lastname: '',
+            imageUrl: '',
+            email: '',
+
             products: [],
+            meta: new Object(),
+            links: new Object()
         }
     },
     methods: {
+        fetchUserProfile() {
+            Axios
+                .get('/user')
+                .then(res => {
+                    const data = res.data
+                    this.firstname = data.firstname
+                    this.lastname = data.lastname
+                    this.imageUrl = data.image
+                    this.email = data.email
+                })
+                .catch(e => {
+                    // console.log(e.response)
+                })
+        },
         fetchProducts() {
-            this.products = Array(10);
+            Axios
+                .get('/user/products')
+                .then(res => {
+                    const data = res.data
+                    this.products = data.data
+                    this.meta = data.meta
+                    this.links = data.links
+                })
+                .catch(e => {
+                    // console.log(e.response)
+                })
         },
     },
     mounted() {
-        this.fetchProducts();
+        this.fetchUserProfile()
+        this.fetchProducts()
     }
 }
 </script>
@@ -79,7 +116,11 @@ export default {
                 </ul>
             </div>
 
-            <ProductsList :products="products" />
+            <ProductsList 
+                :products="products"
+                :meta="meta"
+                :links="links" 
+            />
         </div>
 
     </div>

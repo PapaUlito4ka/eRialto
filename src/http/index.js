@@ -1,42 +1,44 @@
-import axios from 'axios';
-import store from '../store';
-import axiosRetry from 'axios-retry';
+import axios from 'axios'
+import store from '../store'
+import axiosRetry from 'axios-retry'
 
+const BASE_URL = 'http://localhost:3000'
 
 function clearUserSession() {
-  store.state.user = store.state.accessToken = store.state.refreshToken = null;
-  localStorage.clear();
+  store.state.user = store.state.accessToken = store.state.refreshToken = null
+  localStorage.clear()
 }
 
 function setAccessToken(token) {
-  store.state.accessToken = token;
-  localStorage.setItem('accessToken', token);
+  store.state.accessToken = token
+  localStorage.setItem('accessToken', token)
 }
 
 export const Axios = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: BASE_URL,
+  headers: {
+    'Authorization': `Bearer ${store.state.accessToken}`
+  }
 })
 
 Axios.interceptors.response.use(function (response) {
-  return response;
+  return response
 }, async function (error) {
-  let res = error.response;
+  let res = error.response
 
-  if (res.status === 401) {
+  if (error.config && res && res.status === 401) {
     try {
-      const res = await axios.create({ baseURL: 'http://localhost:3000' })
+      const res = await axios.create({ baseURL: BASE_URL })
         .post('/auth/refresh', {}, {
           headers: {
             Authorization: `Bearer ${store.state.refreshToken}`
           }
-        });
-      console.log(res.data);
-      setAccessToken(res.data.access_token);
+        })
+      setAccessToken(res.data.access_token)
     } catch (e) {
-      console.log(e);
-      clearUserSession();
-      router.push('/sign-in');
-      return;
+      clearUserSession()
+      router.push('/sign-in')
+      return
     }
   }
 
@@ -46,8 +48,9 @@ Axios.interceptors.response.use(function (response) {
 axiosRetry(Axios, {
   retries: 2,
   retryCondition: function (error) {
-    let res = error.response
-
-    return res.status === 401
-  }
+    return error.response.status === 401
+  },
+  retryDelay: (retryCount) => {
+    return 50
+  },
 })

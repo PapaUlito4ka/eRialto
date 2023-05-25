@@ -1,12 +1,21 @@
 <script>
 import ProductItem from './product-item.vue';
+import moment from 'moment'
+
 
 export default {
     components: {
         ProductItem
     },
     props: {
-        products: Array
+        products: Array,
+        meta: null,
+        links: null
+    },
+    methods: {
+        formatDate(value) {
+            return moment(value).format('DD.MM.YYYY')
+        }
     },
     mounted() { }
 }
@@ -16,19 +25,25 @@ export default {
 
 <template>
     <div v-for="(product, idx) in products" class="mb-3">
-        <ProductItem :idx="idx" :title="'Жилет Stone Island Hidden Reflective'"
-            :description="'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce facilisis nisl neque, et vestibulum dui sollicitudin eu. Sed imperdiet tellus nec lacus accumsan euismod. Sed faucibus, enim ac sagittis rhoncus, ligula libero tincidunt elit, id bibendum quam ipsum in ipsum. Pellentesque odio dui, convallis nec vehicula vitae, consectetur id mauris. Vestibulum nec ipsum et neque interdum commodo. Integer in maximus quam. Etiam efficitur ultrices urna, eu volutpat mauris sollicitudin at. Etiam pretium risus non ipsum facilisis, vitae finibus tellus tempus. Nam vel odio ac massa placerat dictum eget vel mauris. Praesent quis posuere lacus, nec viverra ligula. Cras venenatis ultrices lectus, sit amet vehicula felis vulputate semper. Phasellus imperdiet magna non metus suscipit, ut dignissim lacus facilisis. Sed iaculis lectus leo, lacinia placerat orci mollis quis.'"
-            :price="10499" :address="'Санкт-Петербург, Ладожская'" :timestamp="'12.03.2023'" />
+        <ProductItem 
+            :idx="idx" 
+            :title="product.name"
+            :description="product.description"
+            :price="product.price" 
+            :address="product.address" 
+            :timestamp="formatDate(product.createdAt)" 
+            :images="product.images"
+        />
     </div>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
+            <li v-if="links.previous" class="page-item disabled">
                 <a class="page-link">Previous</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
+            <li v-if="meta.currentPage > 1" class="page-item"><a class="page-link" href="#">{{ meta.currentPage - 1 }}</a></li>
+            <li class="page-item active"><a class="page-link" href="#">{{ meta.currentPage }}</a></li>
+            <li v-if="meta.currentPage < meta.totalPages" class="page-item"><a class="page-link" href="#">{{ meta.currentPage + 1 }}</a></li>
+            <li v-if="links.next" class="page-item">
                 <a class="page-link" href="#">Next</a>
             </li>
         </ul>

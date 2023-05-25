@@ -6,9 +6,9 @@ export default {
         title: String,
         price: Number,
         description: String,
-        imgUrl: String,
         address: String,
-        timestamp: String
+        timestamp: String,
+        images: Array
     }
 }
 
@@ -27,16 +27,8 @@ export default {
                     aria-label="Slide 3"></button>
             </div>
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img :src="imgUrl ? imgUrl : 'https://placehold.co/200x175'" onclick="location.href='#';" class="rounded"
-                        style="cursor: pointer;">
-                </div>
-                <div class="carousel-item">
-                    <img :src="imgUrl ? imgUrl : 'https://placehold.co/200x175'" onclick="location.href='#';" class="rounded"
-                        style="cursor: pointer;">
-                </div>
-                <div class="carousel-item">
-                    <img :src="imgUrl ? imgUrl : 'https://placehold.co/200x175'" onclick="location.href='#';" class="rounded"
+                <div v-for="image in images" class="carousel-item active">
+                    <img :src="image.path ? image.path : 'https://placehold.co/200x175'" onclick="location.href='#';" class="rounded"
                         style="cursor: pointer;">
                 </div>
             </div>
