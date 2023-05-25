@@ -20,7 +20,15 @@ export class Image extends CreateUpdateMixin {
 
     @Column({
         length: 256,
-        nullable: false
+        nullable: false,
+        transformer: {
+            to(value) {
+                return value;
+            },
+            from(value) {
+                return 'http://localhost:3000' + value;
+            }
+        }
     })
     path: String;
 

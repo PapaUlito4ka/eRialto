@@ -40,7 +40,7 @@ export class UsersService {
 
   async getUserProfile(user: User) {
     const userProfile = await this.usersProfilesRepository.findOne({
-      relations: { user: true, image: true },
+      relations: { image: true, user: true },
       where: { user: { id: user.id } }
     }
     );

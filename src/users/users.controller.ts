@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseFilters, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseFilters, Request, UseInterceptors, UploadedFile, ClassSerializerInterceptor } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -12,11 +12,13 @@ import { Paginate, PaginateQuery } from 'nestjs-paginate';
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   userProfile(@Request() req) {
     return this.usersService.getUserProfile(req.user);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('products')
   userProducts(@Request() req, @Paginate() query: PaginateQuery) {
     return this.usersService.userProducts(req.user, query);
