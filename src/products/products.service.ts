@@ -49,12 +49,15 @@ export class ProductsService {
       .leftJoinAndSelect('products.category', 'category')
       .leftJoinAndSelect('products.images', 'images')
       .orderBy('products."createdAt"', 'DESC');
-    
+
     return paginate(query, queryBuilder, productsPaginateConfig);
   }
 
   async findOne(id: number) {
-    const product = await this.productsRepository.findOneBy({ id: id });
+    const product = await this.productsRepository.findOne({
+      where: { id: id },
+      relations: { images: true, user: { profile: true }, category: true }
+    });
     if (product) return product;
     throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
   }
