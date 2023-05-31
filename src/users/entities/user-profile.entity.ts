@@ -31,6 +31,12 @@ export class UserProfile extends CreateUpdateMixin {
     })
     lastname: string;
 
+    @Column({
+        length: 64,
+        nullable: true,
+    })
+    phone: string;
+
     @OneToOne('Image', 'userProfile', {
         nullable: true,
         onDelete: "SET NULL"
