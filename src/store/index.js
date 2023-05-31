@@ -37,6 +37,10 @@ export default new Store({
             let user = JSON.parse(state.user);
             return user.profile.firstname + ' ' + user.profile.lastname;
         },
+        getUserId(state) {
+            let user = JSON.parse(state.user);
+            return user.id;
+        },
         getAccessToken(state) {
             return state.accessToken;
         },

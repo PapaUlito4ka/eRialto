@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from "vuex"
 
 export default {
     props: {
@@ -7,8 +8,13 @@ export default {
         price: Number,
         imgUrl: String,
         address: String,
-        date: String
-    }
+        timestamp: String,
+        images: Array,
+        user: Object
+    },
+    computed: {
+        ...mapGetters(["getUserId"])
+    },
 }
 
 </script>
@@ -19,25 +25,20 @@ export default {
 
         <div :id="`carouselExampleIndicators${idx}`" class="carousel slide card-img-top" data-bs-ride="true">
             <div class="carousel-indicators">
-                <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="0"
-                    class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-                <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="2"
-                    aria-label="Slide 3"></button>
+                <button v-if="images.length" type="button" :data-bs-target="`#carouselExampleIndicators${idx}`"
+                    data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button v-for="(image, i) in images.slice(1)" type="button"
+                    :data-bs-target="`#carouselExampleIndicators${idx}`" :data-bs-slide-to="`${i + 1}`"
+                    :aria-label="`Slide ${i + 2}`"></button>
             </div>
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img :src="imgUrl ? imgUrl : 'https://placehold.co/150x125'" class="card-img-top"
-                        onclick="location.href='#';" style="cursor: pointer;">
+                <div v-if="images.length" class="carousel-item active">
+                    <img :src="images.length ? images[0].path : 'https://placehold.co/150x125'" onclick="location.href='#';"
+                        class="rounded preview-image">
                 </div>
-                <div class="carousel-item">
-                    <img :src="imgUrl ? imgUrl : 'https://placehold.co/150x125'" class="card-img-top"
-                        onclick="location.href='#';" style="cursor: pointer;">
-                </div>
-                <div class="carousel-item">
-                    <img :src="imgUrl ? imgUrl : 'https://placehold.co/150x125'" class="card-img-top"
-                        onclick="location.href='#';" style="cursor: pointer;">
+                <div v-for="image in images.slice(1)" class="carousel-item">
+                    <img :src="image.path ? image.path : 'https://placehold.co/150x125'" onclick="location.href='#';"
+                        class="rounded preview-image">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" :data-bs-target="`#carouselExampleIndicators${idx}`"
@@ -55,11 +56,20 @@ export default {
         <div class="card-body">
             <div class="d-flex flex-row justify-content-between">
                 <h5 class="card-title" onclick="location.href='#';" style="cursor: pointer;">{{ title }}</h5>
-                <div><a style="cursor: pointer;"><i class="bi bi-heart fs-5"></i></a></div>
+                <div v-if="getUserId !== user.id"><a style="cursor: pointer;"><i class="bi bi-heart fs-5"></i></a></div>
             </div>
             <p class="m-0 fs-5 fw-bold">{{ price }}&nbsp;$</p>
             <small class="m-0 text-body-secondary">{{ address }}</small><br />
-            <small class="m-0 text-body-secondary">{{ date }}</small>
+            <small class="m-0 text-body-secondary">{{ timestamp }}</small>
         </div>
     </div>
 </template>
+
+<style scoped>
+.preview-image {
+    cursor: pointer;
+    height: 225px;
+    width: 100%;
+    object-fit: contain;
+}
+</style>

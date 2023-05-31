@@ -1,6 +1,6 @@
 <script>
-import ProductItem from './product-item.vue';
-import moment from 'moment'
+import ProductItem from './product-item.vue'
+import { formatDate } from '../../common'
 
 
 export default {
@@ -9,12 +9,12 @@ export default {
     },
     props: {
         products: Array,
-        meta: null,
-        links: null
+        meta: Object,
+        links: Object
     },
     methods: {
         formatDate(value) {
-            return moment(value).format('DD.MM.YYYY')
+            return formatDate(value)
         }
     },
     mounted() { }
@@ -33,6 +33,7 @@ export default {
             :address="product.address" 
             :timestamp="formatDate(product.createdAt)" 
             :images="product.images"
+            :user="product.user"
         />
     </div>
     <nav aria-label="Page navigation example">
@@ -41,7 +42,7 @@ export default {
                 <a class="page-link">Previous</a>
             </li>
             <li v-if="meta.currentPage > 1" class="page-item"><a class="page-link" href="#">{{ meta.currentPage - 1 }}</a></li>
-            <li class="page-item active"><a class="page-link" href="#">{{ meta.currentPage }}</a></li>
+            <li v-if="products.length" class="page-item active"><a class="page-link" href="#">{{ meta.currentPage }}</a></li>
             <li v-if="meta.currentPage < meta.totalPages" class="page-item"><a class="page-link" href="#">{{ meta.currentPage + 1 }}</a></li>
             <li v-if="links.next" class="page-item">
                 <a class="page-link" href="#">Next</a>
