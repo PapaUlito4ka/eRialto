@@ -17,19 +17,22 @@ export default {
 
 <template>
     <div class="d-flex flex-row card p-3">
-        <div :id="`carouselExampleIndicators${idx}`" class="carousel slide me-3" data-bs-ride="true" style="width: 200px; height: 175px;">
+        <div :id="`carouselExampleIndicators${idx}`" class="carousel slide me-3" data-bs-ride="true"
+            style="width: 200px; height: 175px;">
             <div class="carousel-indicators">
-                <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="0"
+                <button v-if="images" type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="0"
                     class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-                <button type="button" :data-bs-target="`#carouselExampleIndicators${idx}`" data-bs-slide-to="2"
-                    aria-label="Slide 3"></button>
+                <button v-for="(image, i) in images.slice(1)" type="button" :data-bs-target="`#carouselExampleIndicators${idx}`"
+                    :data-bs-slide-to="`${i + 1}`" :aria-label="`Slide ${i + 2}`"></button>
             </div>
             <div class="carousel-inner">
-                <div v-for="image in images" class="carousel-item active">
-                    <img :src="image.path ? image.path : 'https://placehold.co/200x175'" onclick="location.href='#';" class="rounded"
-                        style="cursor: pointer;">
+                <div v-if="images" class="carousel-item active">
+                    <img :src="images[0].path ? images[0].path : 'https://placehold.co/200x175'" onclick="location.href='#';"
+                        class="rounded" style="cursor: pointer; height: 175px; width: 200px;">
+                </div>
+                <div v-for="image in images.slice(1)" class="carousel-item">
+                    <img :src="image.path ? image.path : 'https://placehold.co/200x175'" onclick="location.href='#';"
+                        class="rounded" style="cursor: pointer; height: 175px; width: 200px;">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" :data-bs-target="`#carouselExampleIndicators${idx}`"
