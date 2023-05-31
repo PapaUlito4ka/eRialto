@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import Image from './entities/image.entity';
 import type UserProfile from 'src/users/entities/user-profile.entity';
 import type Product from 'src/products/entities/product.entity';
@@ -49,6 +49,14 @@ export class ImagesService {
 
   findOne(id: number) {
     return `This action returns a #${id} image`;
+  }
+
+  async findByPath(path: string) {
+    const image = await this.imagesRepository.findOne({
+      where: { path: Like(path) }
+    });
+    if (image) return image;
+    throw new HttpException('Image does not exist', HttpStatus.NOT_FOUND);
   }
 
   async update(image: Image, file: Express.Multer.File) {
