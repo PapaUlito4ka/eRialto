@@ -144,7 +144,7 @@ export default {
                     <div class="d-flex flex-column p-3">
                         <div class="d-flex card py-2 px-5 mb-2">
                             <p class="mb-0">
-                                <nobr>{{ product.user.phone || product.user.email }}</nobr>
+                                <span>{{ product.user.profile.phone || product.user.email }}</span>
                             </p>
                         </div>
                         <div class="d-flex flex-row justify-content-center align-items-center">

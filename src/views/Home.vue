@@ -11,7 +11,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["isLoggedIn"])
+        ...mapGetters(["isLoggedIn", "getAccessToken"])
     },
     methods: {
         formatDate(value) {
@@ -19,7 +19,11 @@ export default {
         },
         fetchProducts() {
             Axios
-                .get('/products')
+                .get('/products', {
+                    headers: {
+                        Authorization: `Bearer ${this.getAccessToken}`
+                    }
+                })
                 .then(res => {
                     this.products = res.data.data
                 })
@@ -44,6 +48,7 @@ export default {
 
                 <ProductItemSmall 
                     :idx="idx" 
+                    :id="product.id"
                     :title="product.name" 
                     :price="product.price"
                     :address="product.address" 

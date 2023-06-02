@@ -4,6 +4,7 @@ import { mapGetters } from "vuex"
 export default {
     props: {
         idx: Number,
+        id: Number,
         title: String,
         price: Number,
         description: String,
@@ -11,6 +12,11 @@ export default {
         timestamp: String,
         images: Array,
         user: Object
+    },
+    methods: {
+        getProduct() {
+            location.href = `/products/${this.id}`
+        }
     },
     computed: {
         ...mapGetters(["getUserId"])
@@ -33,11 +39,11 @@ export default {
             </div>
             <div class="carousel-inner">
                 <div v-if="images.length" class="carousel-item active">
-                    <img :src="images.length ? images[0].path : 'https://placehold.co/200x175'" onclick="location.href='#';"
+                    <img :src="images.length ? images[0].path : 'https://placehold.co/200x175'" :onclick="getProduct"
                         class="rounded" style="cursor: pointer; height: 175px; width: 200px;">
                 </div>
                 <div v-for="image in images.slice(1)" class="carousel-item">
-                    <img :src="image.path ? image.path : 'https://placehold.co/200x175'" onclick="location.href='#';"
+                    <img :src="image.path ? image.path : 'https://placehold.co/200x175'" :onclick="getProduct"
                         class="rounded" style="cursor: pointer; height: 175px; width: 200px;">
                 </div>
             </div>
@@ -55,7 +61,7 @@ export default {
 
         <div class="d-flex flex-column flex-fill">
             <div class="d-flex flex-row justify-content-between">
-                <h5 class="card-title" onclick="location.href='#';" style="cursor: pointer;">{{ title }}</h5>
+                <h5 class="card-title" :onclick="getProduct" style="cursor: pointer;">{{ title }}</h5>
                 <div v-if="getUserId !== user.id"><a style="cursor: pointer;"><i class="bi bi-heart fs-5"></i></a></div>
             </div>
             <p class="m-0 fs-5">{{ price }}&nbsp;$</p>

@@ -26,7 +26,8 @@ export default {
 <template>
     <div v-for="(product, idx) in products" class="mb-3">
         <ProductItem 
-            :idx="idx" 
+            :idx="idx"
+            :id="product.id"
             :title="product.name"
             :description="product.description"
             :price="product.price" 
