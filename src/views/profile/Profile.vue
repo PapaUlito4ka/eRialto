@@ -1,18 +1,23 @@
 <script>
 import { mapGetters } from "vuex";
-import { Axios } from '../http';
+import { Axios } from '../../http';
+import ProductsList from '../../components/products/products-list.vue';
 
 export default {
     computed: {
-        ...mapGetters(["isLoggedIn"])
+        ...mapGetters(["isLoggedIn", "getFirstname", "getAccessToken"])
     },
+    components: { ProductsList },
     data() {
         return {
             firstname: '',
             lastname: '',
             imageUrl: '',
             email: '',
-            phone: ''
+
+            products: [],
+            meta: new Object(),
+            links: new Object()
         }
     },
     methods: {
@@ -24,16 +29,29 @@ export default {
                     this.firstname = data.firstname
                     this.lastname = data.lastname
                     this.imageUrl = data.image
-                    this.email = data.user.email
-                    this.phone = data.phone
+                    this.email = data.email
                 })
                 .catch(e => {
-                    console.log(e.response)
+                    // console.log(e.response)
                 })
-        }
+        },
+        fetchProducts() {
+            Axios
+                .get('/user/products')
+                .then(res => {
+                    const data = res.data
+                    this.products = data.data
+                    this.meta = data.meta
+                    this.links = data.links
+                })
+                .catch(e => {
+                    // console.log(e.response)
+                })
+        },
     },
     mounted() {
         this.fetchUserProfile()
+        this.fetchProducts()
     }
 }
 </script>
@@ -51,7 +69,7 @@ export default {
             <div class="mt-3 d-flex flex-column align-items-start">
                 <div class="d-flex flex-fill flex-column">
                     <div class="mb-2">
-                        <a href="#">My products</a>
+                        <a href="#" style="color: red;">My products</a>
                     </div>
                     <div class="mb-2">
                         <a href="#">My reviews</a>
@@ -79,46 +97,31 @@ export default {
                         <a href="#">Profile</a>
                     </div>
                     <div>
-                        <a href="#" style="color: red;">Settings</a>
+                        <a href="/profile/settings">Settings</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="kekos">
-            <h2 class="mb-3">Settings</h2>
-            <form @submit.prevent="saveSettings" class="row g-3">
-                <div class="col-md-6">
-                    <label for="firstnameId" class="form-label">Firstname</label>
-                    <input v-model="firstname" type="text" class="form-control" id="firstnameId">
-                </div>
-                <div class="col-md-6">
-                    <label for="lastnameId" class="form-label">Lastname</label>
-                    <input v-model="lastname" type="text" class="form-control" id="lastnameId">
-                </div>
-                <div class="col-md-6">
-                    <label for="phoneId" class="form-label">Phone</label>
-                    <input v-model="phone" type="text" class="form-control" id="phoneId">
-                </div>
-                <div class="col-md-6">
-                    <label for="emailId" class="form-label">Email</label>
-                    <input v-model="email" type="email" class="form-control" id="emailId">
-                </div>
-                <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
+            <h2 class="mb-3">My products</h2>
+            <div class="mb-3">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Archived</a>
+                    </li>
+                </ul>
+            </div>
+
+            <ProductsList 
+                :products="products"
+                :meta="meta"
+                :links="links" 
+            />
         </div>
 
     </div>
 </template>
-
-
-<style scoped>
-.preview-image {
-    cursor: pointer;
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-}
-</style>

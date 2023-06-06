@@ -1,7 +1,7 @@
 <script>
-import { Axios } from '../http';
+import { Axios } from '../../http';
 import { mapGetters } from 'vuex';
-import { formatDate } from '../common';
+import { formatDate } from '../../common';
 
 export default {
     data() {

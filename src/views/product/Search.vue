@@ -1,6 +1,6 @@
 <script>
-import { Axios } from '../http';
-import ProductsList from '../components/products/products-list.vue';
+import { Axios } from '../../http';
+import ProductsList from '../../components/products/products-list.vue';
 
 export default {
     components: { ProductsList },

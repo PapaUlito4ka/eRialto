@@ -1,6 +1,6 @@
 <script>
 import { mapMutations } from 'vuex';
-import { Axios } from '../http';
+import { Axios } from '../../http';
 
 export default {
     data: () => {
