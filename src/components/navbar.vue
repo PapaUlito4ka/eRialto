@@ -75,7 +75,7 @@ export default {
                         <router-link to="#" class="nav-link" style="padding-top: 6px;"><i
                                 class="bi bi-heart-fill fs-5"></i></router-link>
                         <router-link to="#" class="nav-link me-3 py-1"><i class="bi bi-chat-fill fs-5"></i></router-link>
-                        <router-link to="/profile" class="nav-link me-3">My products</router-link>
+                        <router-link to="/profile/products" class="nav-link me-3">My products</router-link>
                         <li class="nav-item dropdown me-3">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                                 aria-expanded="false">{{ getFirstname }}</a>
