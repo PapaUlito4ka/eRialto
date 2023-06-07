@@ -65,34 +65,34 @@ export default {
     <div class="sticky-top" style="background-color: #fff;">
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid px-0">
-                <router-link to="/" class="navbar-brand fs-4">eRialto</router-link>
+                <a href="/" class="navbar-brand fs-4">eRialto</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                     aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                     <div v-if="isLoggedIn" class="navbar-nav" id="nav">
-                        <router-link to="#" class="nav-link" style="padding-top: 6px;"><i
-                                class="bi bi-heart-fill fs-5"></i></router-link>
-                        <router-link to="#" class="nav-link me-3 py-1"><i class="bi bi-chat-fill fs-5"></i></router-link>
-                        <router-link to="/profile/products" class="nav-link me-3">My products</router-link>
+                        <a href="#" class="nav-link" style="padding-top: 6px;"><i
+                                class="bi bi-heart-fill fs-5"></i></a>
+                        <a href="#" class="nav-link me-3 py-1"><i class="bi bi-chat-fill fs-5"></i></a>
+                        <a href="/profile/products" class="nav-link me-3">My products</a>
                         <li class="nav-item dropdown me-3">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                                 aria-expanded="false">{{ getFirstname }}</a>
                             <ul class="dropdown-menu">
-                                <li><router-link to="/profile" class="dropdown-item">My profile</router-link></li>
+                                <li><a href="/profile" class="dropdown-item">My profile</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><router-link to="/logout" class="dropdown-item">Logout</router-link></li>
+                                <li><a href="/logout" class="dropdown-item">Logout</a></li>
                             </ul>
                         </li>
-                        <router-link to="/create-product" class="btn btn-primary" role="button">Publish
-                            product</router-link>
+                        <a href="/create-product" class="btn btn-primary" role="button">Publish
+                            product</a>
                     </div>
                     <div v-else class="navbar-nav" id="nav">
-                        <router-link to="/sign-in" class="nav-link">Sign&nbsp;in</router-link>
-                        <router-link to="/sign-up" class="nav-link">Sign&nbsp;up</router-link>
+                        <a href="/sign-in" class="nav-link">Sign&nbsp;in</a>
+                        <a href="/sign-up" class="nav-link">Sign&nbsp;up</a>
                     </div>
                 </div>
             </div>
