@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, getRepository } from 'typeorm';
 import type User from './user.entity';
 import type Image from 'src/images/entities/image.entity';
+import type Review from 'src/reviews/entities/review.entity';
 import { CreateUpdateMixin } from '../../mixins/create-update.mixin';
 
 @Entity({
@@ -42,6 +43,8 @@ export class UserProfile extends CreateUpdateMixin {
         onDelete: "SET NULL"
     })
     image: Image;
+
+    avgRating: number;
 }
 
 export default UserProfile;

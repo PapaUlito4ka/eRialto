@@ -41,6 +41,31 @@ export class ReviewsService {
     return paginate(query, queryBuilder, reviewsPaginateConfig);
   }
 
+  async findReviewsToUser(userId: number) {
+    return await this.reviewsRepository
+      .createQueryBuilder('reviews')
+      .leftJoinAndSelect('reviews.fromUser', 'fromUser')
+      .leftJoinAndSelect('reviews.toUser', 'toUser')
+      .where('reviews.toUser = :userId', { userId: userId })
+      .getMany();
+  }
+
+  async findReviewsFromUser(userId: number) {
+    return await this.reviewsRepository
+      .createQueryBuilder('reviews')
+      .leftJoinAndSelect('reviews.fromUser', 'fromUser')
+      .leftJoinAndSelect('reviews.toUser', 'toUser')
+      .where('reviews.fromUser = :userId', { userId: userId })
+      .getMany();
+  }
+
+  async computeUserAvgRating(userId: number) {
+    const reviews = await this.findReviewsToUser(userId);
+    const ratingSum = 0;
+    reviews.reduce((s, review) => s + Number(review.rating), ratingSum);
+    return ratingSum / (reviews.length ? reviews.length : 1);
+  }
+
   async findOne(id: number) {
     const review = await this.reviewsRepository.findOneBy({ id: id });
     if (review) return review;

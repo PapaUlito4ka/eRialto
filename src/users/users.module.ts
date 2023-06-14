@@ -10,12 +10,15 @@ import Image from 'src/images/entities/image.entity';
 import { ProductsService } from 'src/products/products.service';
 import Category from 'src/categories/entities/category.entity';
 import { CategoriesService } from 'src/categories/categories.service';
+import Review from 'src/reviews/entities/review.entity';
+import { ReviewsService } from 'src/reviews/reviews.service';
+import { UserProfileSubscriber } from './users.subscriber';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService, ImagesService, ProductsService, CategoriesService],
+  providers: [UsersService, ImagesService, ProductsService, CategoriesService, ReviewsService, UserProfileSubscriber],
   imports: [
-    TypeOrmModule.forFeature([User, UserProfile, Product, Image, Category])
+    TypeOrmModule.forFeature([User, UserProfile, Product, Image, Category, Review])
   ]
 })
 export class UsersModule { }
