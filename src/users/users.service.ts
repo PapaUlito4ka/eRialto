@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import UserProfile from './entities/user-profile.entity';
 import { ImagesService } from 'src/images/images.service';
@@ -19,6 +19,7 @@ export class UsersService {
     private usersProfilesRepository: Repository<UserProfile>,
     private productsService: ProductsService,
     private imagesService: ImagesService,
+    private dataSource: DataSource
   ) { }
 
   async create(createUserDto: CreateUserDto) {
@@ -28,12 +29,15 @@ export class UsersService {
     newUser.email = createUserDto.email;
     newUser.salt = await bcrypt.genSalt(12);
     newUser.passwordHash = await bcrypt.hash(createUserDto.password, newUser.salt);
-    await this.usersRepository.save(newUser);
 
     newUserProfile.firstname = createUserDto.firstname;
     newUserProfile.lastname = createUserDto.lastname;
     newUserProfile.user = newUser;
-    await this.usersProfilesRepository.save(newUserProfile);
+
+    await this.dataSource.transaction(async (transactionManager: EntityManager) => {
+      await this.usersRepository.save(newUser);
+      await this.usersProfilesRepository.save(newUserProfile);
+    });
 
     return newUserProfile;
   }

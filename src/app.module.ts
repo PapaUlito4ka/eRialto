@@ -11,7 +11,6 @@ import { CategoriesModule } from './categories/categories.module';
 import { ChatModule } from './chat/chat.module';
 import { ImagesModule } from './images/images.module';
 import { ReviewsModule } from './reviews/reviews.module';
-import { UserProfileSubscriber } from './users/users.subscriber';
 
 config();
 
@@ -35,7 +34,6 @@ config();
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
         autoLoadEntities: true,
-        // subscribers: [UserProfileSubscriber]
       }),
     }),
   ],

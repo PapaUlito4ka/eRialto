@@ -43,8 +43,6 @@ export class UserProfile extends CreateUpdateMixin {
         onDelete: "SET NULL"
     })
     image: Image;
-
-    avgRating: number;
 }
 
 export default UserProfile;

@@ -10,6 +10,8 @@ import User from 'src/users/entities/user.entity';
 import { ImagesService } from 'src/images/images.service';
 import type Image from 'src/images/entities/image.entity';
 import { CategoriesService } from 'src/categories/categories.service';
+import { parseFilter } from 'nestjs-paginate/lib/filter';
+import Review from 'src/reviews/entities/review.entity';
 
 @Injectable()
 export class ProductsService {
@@ -49,8 +51,18 @@ export class ProductsService {
       .leftJoinAndSelect('products.category', 'category')
       .leftJoinAndSelect('products.images', 'images')
       .orderBy('products."createdAt"', 'DESC');
-
-    return paginate(query, queryBuilder, productsPaginateConfig);
+    
+    let avgRatingGte = 0;
+    let avgRatingLte = 5;
+    if (query.filter) {
+      avgRatingGte = Number.parseInt(query.filter['user.avgRating__gte'] as string);
+      avgRatingLte = Number.parseInt(query.filter['user.avgRating__lte'] as string);
+    }
+    const products = await paginate(query, queryBuilder, productsPaginateConfig);
+    products.data = products.data.filter(product =>
+      product.user.avgRating >= avgRatingGte && product.user.avgRating <= avgRatingLte
+    );
+    return products;
   }
 
   async findOne(id: number) {

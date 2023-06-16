@@ -12,11 +12,11 @@ import Category from 'src/categories/entities/category.entity';
 import { CategoriesService } from 'src/categories/categories.service';
 import Review from 'src/reviews/entities/review.entity';
 import { ReviewsService } from 'src/reviews/reviews.service';
-import { UserProfileSubscriber } from './users.subscriber';
+import { UserSubscriber } from './users.subscriber';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService, ImagesService, ProductsService, CategoriesService, ReviewsService, UserProfileSubscriber],
+  providers: [UsersService, ImagesService, ProductsService, CategoriesService, ReviewsService, UserSubscriber],
   imports: [
     TypeOrmModule.forFeature([User, UserProfile, Product, Image, Category, Review])
   ]

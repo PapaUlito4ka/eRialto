@@ -50,6 +50,8 @@ export class User {
         onDelete: "CASCADE"
     })
     products: Product[];
+
+    avgRating: number;
 }
 
 export default User;
