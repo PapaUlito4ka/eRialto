@@ -10,6 +10,11 @@ export default {
             meta: new Object(),
             links: new Object(),
             query: '',
+
+            priceFrom: null,
+            priceTo: null,
+            sellerRatingFrom: null,
+            sellerRatingTo: null
         }
     },
     methods: {
@@ -45,21 +50,31 @@ export default {
         <h1>Products for search "{{ this.query }}"</h1>
         <div class="row">
             <div class="col-3">
-
                 <div class="mb-3">
                     <label class="form-label">Price</label>
                     <div class="input-group">
-                        <input type="text" aria-label="First name" class="form-control" placeholder="From">
-                        <input type="text" aria-label="Last name" class="form-control" placeholder="To">
+                        <input v-model="priceFrom" type="text" class="form-control" placeholder="From">
+                        <input v-model="priceTo" type="text" class="form-control" placeholder="To">
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="ratingId" class="form-label">Sellers rating</label>
-                    <input type="range" class="form-range" min="0" max="5" id="ratingId">
+                    <label class="form-label">Sellers rating</label>
+                    <div class="input-group">
+                        <input v-model="sellerRatingFrom" type="text" class="form-control" placeholder="From">
+                        <input v-model="sellerRatingTo" type="text" class="form-control" placeholder="To">
+                    </div>
                 </div>
                 <button type="button" class="btn btn-primary w-100">Show products</button>
             </div>
             <div class="col-8">
+                <div class="p-3 pt-0">
+                    <select class="form-select" aria-label="Default select example" style="width: 200px;">
+                        <option selected>Default</option>
+                        <option value="1">Lower Price</option>
+                        <option value="2">Higher Price</option>
+                        <option value="3">By Date</option>
+                    </select>
+                </div>
                 <ProductsList :products="products" :meta="meta" :links="links" />
             </div>
             <div class="col-1"></div>
