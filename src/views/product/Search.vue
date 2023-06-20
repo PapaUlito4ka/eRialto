@@ -24,7 +24,7 @@ export default {
                 search: this.query,
                 sortBy: 'createdAt:DESC'
             }
-            const availableOrder = ['createdAt:DESC', 'price:DESC', 'price:ASC'];
+            const availableOrder = ['createdAt:DESC', 'price:ASC', 'price:DESC']
             if (this.priceFrom) {
                 searchParams['filter.price'] = `$gte:${this.priceFrom}`
             }
@@ -42,7 +42,6 @@ export default {
             }
             const queryParams = new URLSearchParams(searchParams)
 
-            console.log(queryParams.toString())
             Axios
                 .get(`/products?${queryParams.toString()}`)
                 .then(res => {

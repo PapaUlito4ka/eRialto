@@ -7,6 +7,7 @@ import Logout from '../views/auth/Logout.vue';
 import Search from '../views/product/Search.vue';
 import Product from '../views/product/Product.vue';
 import CreateProduct from '../views/product/CreateProduct.vue';
+import UpdateProduct from '../views/product/UpdateProduct.vue';
 import MyProducts from '../views/profile/Products.vue';
 import MyReviews from '../views/profile/Reviews.vue';
 import Favourites from '../views/profile/Favourites.vue';
@@ -18,11 +19,13 @@ const routes = [
     { path: '/sign-up', name: 'SignUp', component: SignUp },
     { path: '/sign-in', name: 'SignIn', component: SignIn },
 
+    // Product
     { path: '/', name: 'Home', component: Home, meta: { requiresAuth: true } },
     { path: '/logout', name: 'Logout', component: Logout, meta: { requiresAuth: true } },
     { path: '/search', name: 'Search', component: Search, meta: { requiresAuth: true } },
     { path: '/products/:id', name: 'Product', component: Product, meta: { requiresAuth: true } },
     { path: '/create-product', name: 'CreateProduct', component: CreateProduct, meta: { requiresAuth: true } },
+    { path: '/products/:id/edit', name: 'UpdateProduct', component: UpdateProduct, meta: { requiresAuth: true } },
 
     // Profile routes
     { path: '/profile', name: 'Profile', component: Profile, meta: { requiresAuth: true } },

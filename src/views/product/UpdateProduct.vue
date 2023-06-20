@@ -51,14 +51,22 @@ export default {
             this.productId = parseInt(this.$route.params.id)
             if (!this.productId) this.$router.push('/')
         },
-        setProduct() {
-
+        setProduct(data) {
+            this.productId = data.id
+            this.category = data.category.name
+            this.selectedRootCategory = data.category.parentCategory.name
+            this.name = data.name
+            this.description = data.description
+            this.price = data.price
+            this.address = data.address
+            this.images = data.images
         },
         fetchProduct() {
             Axios
                 .get(`/products/${this.productId}`)
                 .then(res => {
-                    console.log(res.data)
+                    this.setProduct(res.data)
+                    this.loadImageFiles()
                 })
                 .catch(e => {
                 })
@@ -75,8 +83,8 @@ export default {
                 })
         },
         rootCategoryChange(event) {
-            console.log('Selected:', event.target.value)
             this.selectedRootCategory = event.target.value
+            this.category = ''
         },
         uploadImages() {
             this.images = Array.prototype.slice.call(this.$refs.imagesInput.files, 0, 5)
@@ -96,7 +104,7 @@ export default {
             }
 
             Axios
-                .post('/products', formData, {
+                .patch(`/products/${this.productId}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${this.getAccessToken}`
@@ -108,6 +116,32 @@ export default {
                 .catch(e => {
                     console.log(e.response)
                 })
+        },
+        loadImageFiles() {
+            let container = new DataTransfer()
+            for (let image of this.images) {
+                this.getImgURL(image.path, (imgBlob) => {
+                    let imageType = image.filename.split(' ').slice(-1)
+                    let file = new File([imgBlob], image.filename, {
+                        type: `image/${imageType}`,
+                        lastModified: new Date().getTime()
+                    }, 'utf-8')
+                    container.items.add(file)
+                    if (container.files.length == this.images.length) {
+                        document.querySelector('#imagesId').files = container.files
+                        console.log(document.querySelector('#imagesId').files)
+                    }
+                })
+            }
+        },
+        getImgURL(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                callback(xhr.response);
+            };
+            xhr.open('GET', url);
+            xhr.responseType = 'blob';
+            xhr.send();
         }
     },
     mounted() {
@@ -126,7 +160,8 @@ export default {
             <form @submit.prevent="updateProduct">
                 <div class="mb-3">
                     <label for="categoryId" class="form-label">Select category</label>
-                    <select @change="rootCategoryChange($event)" class="form-select" id="categoryId" required>
+                    <select v-model="selectedRootCategory" @change="rootCategoryChange($event)" class="form-select"
+                        id="categoryId" required>
                         <option disabled selected value> -- select an option -- </option>
                         <option v-for="(_, category) in categoriesData" :value="category">{{ category }}</option>
                     </select>
@@ -164,9 +199,43 @@ export default {
                     <input v-on:change="uploadImages" class="form-control" type="file" accept="image/*" id="imagesId"
                         multiple ref="imagesInput">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="mb-3">
+                    <div id="carouselExample" class="carousel slide">
+                        <div class="carousel-inner">
+                            <div v-if="images.length" class="carousel-item active">
+                                <img :src="images.length ? images[0].path : 'https://placehold.co/150x125'"
+                                    class="rounded preview-image">
+                            </div>
+                            <div v-for="image in images.slice(1)" class="carousel-item">
+                                <img :src="image.path ? image.path : 'https://placehold.co/150x125'"
+                                    class="rounded preview-image">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
             </form>
         </div>
         <div class="col-2"></div>
     </div>
 </template>
+
+
+<style scoped>
+.preview-image {
+    cursor: pointer;
+    max-height: 700px;
+    width: 100%;
+    object-fit: contain;
+}
+</style>

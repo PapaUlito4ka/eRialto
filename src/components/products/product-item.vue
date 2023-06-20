@@ -18,6 +18,9 @@ export default {
     methods: {
         getProduct() {
             location.href = `/products/${this.id}`
+        },
+        editProduct() {
+            location.href = `/products/${this.id}/edit`
         }
     },
     computed: {
@@ -81,7 +84,7 @@ export default {
                     <small class="m-0 text-body-secondary">{{ timestamp }}</small>
                 </div>
                 <div v-if="profileView">
-                    <a class="fs-4 default-link"><i class="bi bi-pencil-square"></i></a>
+                    <a class="fs-4 default-link" :onclick="editProduct"><i class="bi bi-pencil-square"></i></a>
                 </div>
             </div>
         </div>
