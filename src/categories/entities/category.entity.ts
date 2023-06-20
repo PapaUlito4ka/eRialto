@@ -17,7 +17,7 @@ export class Category {
         unique: true
     })
     @IsNotEmpty()
-    name: String;
+    name: string;
 
 
     @ManyToOne('Category', {

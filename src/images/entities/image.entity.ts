@@ -16,7 +16,7 @@ export class Image extends CreateUpdateMixin {
         length: 256,
         nullable: false
     })
-    filename: String;
+    filename: string;
 
     @Column({
         length: 256,
@@ -30,7 +30,7 @@ export class Image extends CreateUpdateMixin {
             }
         }
     })
-    path: String;
+    path: string;
 
     @OneToOne('User', 'image', {
         nullable: true,

@@ -7,21 +7,15 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { diskStorage } from 'multer';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import * as path from 'path';
+import { fileInterceptor } from './multer.config';
 
 @Controller('products')
 @UseGuards(JwtAuthGuard)
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Post()
-  @UseInterceptors(FilesInterceptor('images', 5, {
-    storage: diskStorage({
-      destination: 'src/media/product_images',
-      filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname))
-      }
-    })
-  }))
+  @UseInterceptors(fileInterceptor)
   create(@Request() req, @Body() createProductDto: CreateProductDto, @UploadedFiles() files: Express.Multer.File[]) {
     return this.productsService.create(req.user, createProductDto, files);
   }
@@ -38,8 +32,9 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  update(@Param('id', new ParseIntPipe()) id: number, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(id, updateProductDto);
+  @UseInterceptors(fileInterceptor)
+  update(@Param('id', new ParseIntPipe()) id: number, @Body() updateProductDto: UpdateProductDto, @UploadedFiles() files: Express.Multer.File[]) {
+    return this.productsService.update(id, updateProductDto, files);
   }
 
   @Delete(':id')

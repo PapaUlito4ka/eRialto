@@ -16,14 +16,14 @@ export class Review extends CreateUpdateMixin {
         length: 256,
         nullable: false
     })
-    body: String;
+    body: string;
 
     @Column({
         nullable: false
     })
     @Min(0)
     @Max(5)
-    rating: Number;
+    rating: number;
 
     @ManyToOne('Product', {
         nullable: false,

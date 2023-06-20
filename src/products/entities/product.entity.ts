@@ -44,7 +44,7 @@ export class Product extends CreateUpdateMixin {
         nullable: false,
     })
     @Min(1)
-    price: Number;
+    price: number;
 
     @Column({
         length: 256,

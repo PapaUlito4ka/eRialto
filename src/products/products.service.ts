@@ -49,13 +49,14 @@ export class ProductsService {
       .createQueryBuilder('products')
       .leftJoinAndSelect('products.user', 'user')
       .leftJoinAndSelect('products.category', 'category')
-      .leftJoinAndSelect('products.images', 'images')
-      .orderBy('products."createdAt"', 'DESC');
+      .leftJoinAndSelect('products.images', 'images');
     
     let avgRatingGte = 0;
     let avgRatingLte = 5;
-    if (query.filter) {
+    if (query.filter && query.filter['user.avgRating__gte']) {
       avgRatingGte = Number.parseInt(query.filter['user.avgRating__gte'] as string);
+    }
+    if (query.filter && query.filter['user.avgRating__lte']) {
       avgRatingLte = Number.parseInt(query.filter['user.avgRating__lte'] as string);
     }
     const products = await paginate(query, queryBuilder, productsPaginateConfig);
@@ -68,13 +69,13 @@ export class ProductsService {
   async findOne(id: number) {
     const product = await this.productsRepository.findOne({
       where: { id: id },
-      relations: { images: true, user: { profile: true }, category: true }
+      relations: { images: true, user: { profile: true }, category: { parentCategory: true } }
     });
     if (product) return product;
     throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
+  async update(id: number, updateProductDto: UpdateProductDto, files: Express.Multer.File[]) {
     const product = await this.findOne(id);
     const category = await this.categoriesService.findOneByName(updateProductDto.category);
 
