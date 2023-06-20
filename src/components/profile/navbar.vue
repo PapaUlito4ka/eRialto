@@ -51,7 +51,7 @@ export default {
                     </div>
                     <div class="mb-2">
                         <router-link v-if="curPage === 'reviews'" to="/profile/reviews" class="curPage">My Reviews</router-link>
-                        <router-link v-else to="/profile/reviews">My reviews</router-link>
+                        <router-link v-else to="/profile/reviews">My Reviews</router-link>
                     </div>
                     <div>
                         <router-link v-if="curPage === 'favourites'" to="/profile/favourites" class="curPage">Favourites</router-link>

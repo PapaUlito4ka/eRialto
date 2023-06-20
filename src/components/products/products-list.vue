@@ -10,7 +10,9 @@ export default {
     props: {
         products: Array,
         meta: Object,
-        links: Object
+        links: Object,
+
+        profileView: Boolean
     },
     methods: {
         formatDate(value) {
@@ -35,6 +37,7 @@ export default {
             :timestamp="formatDate(product.createdAt)" 
             :images="product.images"
             :user="product.user"
+            :profile-view="profileView"
         />
     </div>
     <nav aria-label="Page navigation example">

@@ -11,7 +11,9 @@ export default {
         address: String,
         timestamp: String,
         images: Array,
-        user: Object
+        user: Object,
+
+        profileView: Boolean
     },
     methods: {
         getProduct() {
@@ -62,14 +64,38 @@ export default {
         <div class="d-flex flex-column flex-fill">
             <div class="d-flex flex-row justify-content-between">
                 <h5 class="card-title" :onclick="getProduct" style="cursor: pointer;">{{ title }}</h5>
-                <div v-if="getUserId !== user.id"><a style="cursor: pointer;"><i class="bi bi-heart fs-5"></i></a></div>
+                <div v-if="getUserId !== user.id">
+                    <a style="cursor: pointer;"><i class="bi bi-heart fs-5"></i></a>
+                </div>
+                <div v-if="profileView">
+                    <a class="fs-4 default-link"><i class="bi bi-trash"></i></a>
+                </div>
             </div>
             <p class="m-0 fs-5">{{ price }}&nbsp;$</p>
             <small class="m-0 text-body-secondary mb-1">
                 {{ description.length > 256 ? description.substring(0, 256).trim() + '...' : description }}
             </small>
-            <small class="m-0 text-body-secondary">{{ address }}</small>
-            <small class="m-0 text-body-secondary">{{ timestamp }}</small>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column">
+                    <small class="m-0 text-body-secondary">{{ address }}</small>
+                    <small class="m-0 text-body-secondary">{{ timestamp }}</small>
+                </div>
+                <div v-if="profileView">
+                    <a class="fs-4 default-link"><i class="bi bi-pencil-square"></i></a>
+                </div>
+            </div>
         </div>
     </div>
 </template>
+
+
+<style scoped>
+.default-link {
+    text-decoration: none;
+    color: black;
+}
+
+.default-link:hover {
+    color: grey;
+}
+</style>

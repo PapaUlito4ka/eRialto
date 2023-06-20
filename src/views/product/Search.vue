@@ -14,13 +14,37 @@ export default {
             priceFrom: null,
             priceTo: null,
             sellerRatingFrom: null,
-            sellerRatingTo: null
+            sellerRatingTo: null,
+            sortBy: '0'
         }
     },
     methods: {
         fetchProducts() {
+            const searchParams = {
+                search: this.query,
+                sortBy: 'createdAt:DESC'
+            }
+            const availableOrder = ['createdAt:DESC', 'price:DESC', 'price:ASC'];
+            if (this.priceFrom) {
+                searchParams['filter.price'] = `$gte:${this.priceFrom}`
+            }
+            if (this.priceTo) {
+                searchParams['filter.price'] = `$lte:${this.priceTo}`
+            }
+            if (this.sellerRatingFrom) {
+                searchParams['filter.user.avgRating__gte'] = `${this.sellerRatingFrom}`
+            }
+            if (this.sellerRatingTo) {
+                searchParams['filter.user.avgRating__lte'] = `${this.sellerRatingTo}`
+            }
+            if (this.sortBy) {
+                searchParams['sortBy'] = `${availableOrder[parseInt(this.sortBy)]}`
+            }
+            const queryParams = new URLSearchParams(searchParams)
+
+            console.log(queryParams.toString())
             Axios
-                .get(`/products?search=${this.query}`)
+                .get(`/products?${queryParams.toString()}`)
                 .then(res => {
                     const data = res.data
                     this.products = data.data
@@ -64,15 +88,15 @@ export default {
                         <input v-model="sellerRatingTo" type="text" class="form-control" placeholder="To">
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary w-100">Show products</button>
+                <button type="button" class="btn btn-primary w-100" @click="fetchProducts()">Show products</button>
             </div>
             <div class="col-8">
                 <div class="p-3 pt-0">
-                    <select class="form-select" aria-label="Default select example" style="width: 200px;">
-                        <option selected>Default</option>
+                    <select v-model="sortBy" class="form-select" aria-label="Default select example" style="width: 200px;" @change="fetchProducts()">
+                        <option selected value="0">Default</option>
                         <option value="1">Lower Price</option>
                         <option value="2">Higher Price</option>
-                        <option value="3">By Date</option>
+                        <option value="0">By Date</option>
                     </select>
                 </div>
                 <ProductsList :products="products" :meta="meta" :links="links" />

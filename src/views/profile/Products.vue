@@ -79,7 +79,8 @@ export default {
             <ProductsList 
                 :products="products"
                 :meta="meta"
-                :links="links" 
+                :links="links"
+                :profile-view="true"
             />
         </div>
 

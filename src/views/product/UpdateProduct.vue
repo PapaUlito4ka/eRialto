@@ -17,6 +17,7 @@ export default {
 
             categoriesData: null,
 
+            productId: 0,
             category: '',
             name: '',
             description: '',
@@ -46,14 +47,26 @@ export default {
         setAddress(address) {
             this.address = address
         },
+        setProductId() {
+            this.productId = parseInt(this.$route.params.id)
+            if (!this.productId) this.$router.push('/')
+        },
+        setProduct() {
+
+        },
+        fetchProduct() {
+            Axios
+                .get(`/products/${this.productId}`)
+                .then(res => {
+                    console.log(res.data)
+                })
+                .catch(e => {
+                })
+        },
         fetchCategories() {
             if (this.categoriesData) return
             Axios
-                .get('/categories', {
-                    headers: {
-                        Authorization: `Bearer ${this.getAccessToken}`
-                    }
-                })
+                .get('/categories')
                 .then(res => {
                     this.setCategoriesData(res.data)
                     this.toggleCategoriesLoading()
@@ -69,7 +82,7 @@ export default {
             this.images = Array.prototype.slice.call(this.$refs.imagesInput.files, 0, 5)
             console.log(this.images)
         },
-        createProduct(e) {
+        updateProduct(e) {
             let formData = new FormData()
             e.preventDefault()
 
@@ -98,6 +111,8 @@ export default {
         }
     },
     mounted() {
+        this.setProductId()
+        this.fetchProduct()
         this.fetchCategories()
     }
 }
@@ -108,7 +123,7 @@ export default {
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-            <form @submit.prevent="createProduct">
+            <form @submit.prevent="updateProduct">
                 <div class="mb-3">
                     <label for="categoryId" class="form-label">Select category</label>
                     <select @change="rootCategoryChange($event)" class="form-select" id="categoryId" required>
