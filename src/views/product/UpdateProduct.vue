@@ -99,7 +99,8 @@ export default {
             formData.append('description', this.description)
             formData.append('price', this.price)
             formData.append('address', this.address)
-            for (let image of this.images) {
+            const images = document.querySelector('#imagesId').files;
+            for (let image of images) {
                 formData.append('images', image, image.filename)
             }
 
@@ -129,7 +130,6 @@ export default {
                     container.items.add(file)
                     if (container.files.length == this.images.length) {
                         document.querySelector('#imagesId').files = container.files
-                        console.log(document.querySelector('#imagesId').files)
                     }
                 })
             }

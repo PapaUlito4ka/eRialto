@@ -1,5 +1,6 @@
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters } from "vuex";
+import { Axios } from '../../http';
 
 export default {
     props: {
@@ -15,12 +16,28 @@ export default {
 
         profileView: Boolean
     },
+    data() {
+        return {
+            isRemoved: false
+        }
+    },
     methods: {
         getProduct() {
             location.href = `/products/${this.id}`
         },
         editProduct() {
             location.href = `/products/${this.id}/edit`
+        },
+        deleteProduct() {
+            if (confirm('Are you sure you want to delete this product?')) {
+                Axios
+                    .delete(`/products/${this.id}`)
+                    .then(res => {
+                        this.isRemoved = true
+                    })
+                    .catch(e => {
+                    })
+            }
         }
     },
     computed: {
@@ -32,7 +49,7 @@ export default {
 
 
 <template>
-    <div class="d-flex flex-row card p-3">
+    <div v-if="!isRemoved" class="d-flex flex-row card p-3">
         <div :id="`carouselExampleIndicators${idx}`" class="carousel slide me-3" data-bs-ride="true"
             style="width: 200px; height: 175px;">
             <div class="carousel-indicators">
@@ -71,7 +88,7 @@ export default {
                     <a style="cursor: pointer;"><i class="bi bi-heart fs-5"></i></a>
                 </div>
                 <div v-if="profileView">
-                    <a class="fs-4 default-link"><i class="bi bi-trash"></i></a>
+                    <a class="fs-4 default-link" :onclick="deleteProduct"><i class="bi bi-trash"></i></a>
                 </div>
             </div>
             <p class="m-0 fs-5">{{ price }}&nbsp;$</p>
