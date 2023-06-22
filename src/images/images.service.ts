@@ -6,6 +6,9 @@ import { Like, Repository } from 'typeorm';
 import Image from './entities/image.entity';
 import type UserProfile from 'src/users/entities/user-profile.entity';
 import type Product from 'src/products/entities/product.entity';
+import * as fs from 'fs';
+import * as path from 'path';
+import { promisify } from 'util';
 
 @Injectable()
 export class ImagesService {
@@ -43,12 +46,29 @@ export class ImagesService {
     return createdImages;
   }
 
+  async updateProductImages(files: Express.Multer.File[], product: Product): Promise<Image[]> {
+    await this.removeProductImages(product);
+    return this.createProductsImages(files, product);
+  }
+
+  async removeProductImages(product: Product) {
+    const unlinkAsync = promisify(fs.unlink);
+    
+    for (let image of product.images) {
+      const imageFilePath = path.join('src/media/product_images', image.filename);
+      await unlinkAsync(imageFilePath);
+      await this.remove(image.id);
+    }
+  }
+
   findAll() {
     return `This action returns all images`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} image`;
+  async findOne(id: number) {
+    const image = await this.imagesRepository.findOneBy({ id: id });
+    if (image) return image;
+    throw new HttpException('Image does not exist', HttpStatus.NOT_FOUND);
   }
 
   async findByPath(path: string) {
@@ -66,8 +86,9 @@ export class ImagesService {
     return image;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} image`;
+  async remove(id: number) {
+    const image = await this.findOne(id);
+    await this.imagesRepository.remove(image);
   }
 
   async findUserProfileImage(userProfile: UserProfile) {

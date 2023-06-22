@@ -85,12 +85,18 @@ export class ProductsService {
     product.address = updateProductDto.address;
     product.category = category;
 
-    return await this.productsRepository.save(product);
+    const productImages = await this.updateProductImages(product, files);
+    await this.dataSource.transaction(async (transactionManager: EntityManager) => {
+      await transactionManager.save(product);
+      await transactionManager.save(productImages);
+    });
+
+    return product;
   }
 
   async remove(id: number) {
     const product = await this.findOne(id);
-    return this.productsRepository.remove(product);
+    return await this.productsRepository.remove(product);
   }
 
   async findUserProducts(user: User, query: PaginateQuery) {
@@ -107,5 +113,9 @@ export class ProductsService {
 
   async uploadProductImages(product: Product, files: Express.Multer.File[]) {
     return this.imageService.createProductsImages(files, product);
+  }
+
+  async updateProductImages(product: Product, files: Express.Multer.File[]) {
+    return this.imageService.updateProductImages(files, product);
   }
 }
