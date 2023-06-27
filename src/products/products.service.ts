@@ -105,8 +105,7 @@ export class ProductsService {
       .leftJoinAndSelect('products.user', 'user')
       .leftJoinAndSelect('products.category', 'category')
       .leftJoinAndSelect('products.images', 'images')
-      .where('products.user = :userId', { userId: user.id })
-      .orderBy('products."createdAt"', 'DESC');
+      .where('products.user = :userId', { userId: user.id });
 
     return paginate(query, queryBuilder, productsPaginateConfig);
   }

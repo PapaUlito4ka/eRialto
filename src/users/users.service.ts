@@ -46,8 +46,7 @@ export class UsersService {
     const userProfile = await this.usersProfilesRepository.findOne({
       relations: { image: true, user: true },
       where: { user: { id: user.id } }
-    }
-    );
+    });
     if (userProfile) return userProfile;
     throw new HttpException('User profile does not exist', HttpStatus.NOT_FOUND);
   }
@@ -67,10 +66,11 @@ export class UsersService {
     throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.findOne(id);
-    await this.usersRepository.update({ id: id }, updateUserDto);
-    await this.usersProfilesRepository.update({ id: user.profile.id }, updateUserDto);
+  async update(user: User, updateUserDto: UpdateUserDto) {
+    const { email, ...profileData } = updateUserDto;
+    const userProfile = await this.getUserProfile(user);
+    await this.usersRepository.update({ id: user.id }, { email });
+    await this.usersProfilesRepository.update({ id: userProfile.id }, profileData);
     return this.getUserProfile(user);
   }
 

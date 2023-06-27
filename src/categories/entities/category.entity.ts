@@ -19,13 +19,11 @@ export class Category {
     @IsNotEmpty()
     name: string;
 
-
     @ManyToOne('Category', {
         nullable: true,
         onDelete: "CASCADE"
     })
     parentCategory: Category;
-
 
     @OneToMany('Product', 'category', {
         onDelete: "CASCADE"
