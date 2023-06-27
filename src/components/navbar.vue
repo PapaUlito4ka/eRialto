@@ -125,18 +125,18 @@ export default {
                         <div class="flex-shrink-1 flex-column">
                             <div v-for="(childCategories, category) in categoriesData"
                                 @mouseover="showCurrentCategory(`show${category}`)" class="mb-2 flex-fill">
-                                <a class="d-flex btn btn-light fs-4" href="#" role="button">{{ category.replace(' ', '&nbsp;') }}</a>
+                                <a class="d-flex btn btn-light fs-4" :href="`/search?category=${category}`" role="button">{{ category.replace(' ', '&nbsp;') }}</a>
                             </div>
                         </div>
 
                         <div v-for="(childCategories, category) in categoriesData">
                             <div v-if="categories && categories[`show${category}`]" class="mx-4 d-flex flex-column">
                                 <div class="flex-shrink-1 fs-4 mb-2">
-                                    <a class="d-flex category-link" href="#">{{ category }}</a>
+                                    <a class="d-flex category-link" :href="`/search?category=${category}`">{{ category }}</a>
                                 </div>
                                 <div class="row row-cols-auto">
                                     <div v-for="childCategory in childCategories" class="mb-2">
-                                        <a class="d-flex category-link" href="#" role="button">{{ childCategory }}</a>
+                                        <a class="d-flex category-link" :href="`/search?category=${childCategory}`" role="button">{{ childCategory }}</a>
                                     </div>
                                 </div>
                             </div>

@@ -32,6 +32,21 @@ export default {
                 .catch(e => {
                     console.log(e.response)
                 })
+        },
+        updateProfile() {
+            Axios
+                .patch('/user', {
+                    'firstname': this.firstname,
+                    'lastname': this.lastname,
+                    'email': this.email,
+                    'phone': this.phone
+                })
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(e => {
+                    console.log(e.response)
+                })
         }
     },
     mounted() {
@@ -48,7 +63,7 @@ export default {
 
         <div class="kekos">
             <h2 class="mb-3">Profile</h2>
-            <form @submit.prevent="saveSettings" class="row g-3">
+            <form @submit.prevent="updateProfile" class="row g-3">
                 <div class="col-md-6">
                     <label for="firstnameId" class="form-label">Firstname</label>
                     <input v-model="firstname" type="text" class="form-control" id="firstnameId">

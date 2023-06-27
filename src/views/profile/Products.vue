@@ -15,6 +15,7 @@ export default {
             lastname: '',
             imageUrl: '',
             email: '',
+            selected: true,
 
             products: [],
             meta: new Object(),
@@ -49,6 +50,36 @@ export default {
                     // console.log(e.response)
                 })
         },
+        fetchActiveProducts() {
+            this.selected = true
+            const queryParams = new URLSearchParams({ 'filter.isArchived': false })
+            Axios
+                .get(`/user/products?${queryParams.toString()}`)
+                .then(res => {
+                    const data = res.data
+                    this.products = data.data
+                    this.meta = data.meta
+                    this.links = data.links
+                })
+                .catch(e => {
+                    // console.log(e.response)
+                })
+        },
+        fetchArchivedProducts() {
+            this.selected = false
+            const queryParams = new URLSearchParams({ 'filter.isArchived': true })
+            Axios
+                .get(`/user/products?${queryParams.toString()}`)
+                .then(res => {
+                    const data = res.data
+                    this.products = data.data
+                    this.meta = data.meta
+                    this.links = data.links
+                })
+                .catch(e => {
+                    // console.log(e.response)
+                })
+        }
     },
     mounted() {
         this.fetchUserProfile()
@@ -68,10 +99,12 @@ export default {
             <div class="mb-3">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Active</a>
+                        <a v-if="selected" class="nav-link active" href="#" @click="fetchActiveProducts">Active</a>
+                        <a v-else class="nav-link" href="#" @click="fetchActiveProducts">Active</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Archived</a>
+                        <a v-if="!selected" class="nav-link active" href="#" @click="fetchArchivedProducts">Archived</a>
+                        <a v-else class="nav-link" href="#" @click="fetchArchivedProducts">Archived</a>
                     </li>
                 </ul>
             </div>

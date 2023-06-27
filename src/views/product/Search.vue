@@ -10,6 +10,7 @@ export default {
             meta: new Object(),
             links: new Object(),
             query: '',
+            category: '',
 
             priceFrom: null,
             priceTo: null,
@@ -21,10 +22,13 @@ export default {
     methods: {
         fetchProducts() {
             const searchParams = {
-                search: this.query,
+                search: this.query || '',
                 sortBy: 'createdAt:DESC'
             }
             const availableOrder = ['createdAt:DESC', 'price:ASC', 'price:DESC']
+            if (this.category) {
+                searchParams['filter.category.name'] = this.category
+            }
             if (this.priceFrom) {
                 searchParams['filter.price'] = `$gte:${this.priceFrom}`
             }
@@ -56,7 +60,8 @@ export default {
         },
         checkQueryNotEmpty() {
             this.query = this.$route.query.q;
-            if (!this.query) this.$router.push('/');
+            this.category = this.$route.query.category;
+            if (!this.query && !this.category) this.$router.push('/');
         }
     },
     mounted() {
@@ -70,7 +75,7 @@ export default {
 
 <template>
     <div class="mt-2">
-        <h1>Products for search "{{ this.query }}"</h1>
+        <h1>Products for search "{{ this.query || this.category }}"</h1>
         <div class="row">
             <div class="col-3">
                 <div class="mb-3">
@@ -91,7 +96,8 @@ export default {
             </div>
             <div class="col-8">
                 <div class="p-3 pt-0">
-                    <select v-model="sortBy" class="form-select" aria-label="Default select example" style="width: 200px;" @change="fetchProducts()">
+                    <select v-model="sortBy" class="form-select" aria-label="Default select example" style="width: 200px;"
+                        @change="fetchProducts()">
                         <option selected value="0">Default</option>
                         <option value="1">Lower Price</option>
                         <option value="2">Higher Price</option>
